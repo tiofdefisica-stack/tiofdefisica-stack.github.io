@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Masa Estelar — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #1a1a1a;
+    --ink-light: #555;
+    --rule:      #c8c0b4;
+    --bg:        #faf8f4;
+    --bg-tint:   #f2ede5;
+    --accent:    #8b2e00;
+    --mono:      'JetBrains Mono', monospace;
+    --serif:     'EB Garamond', Georgia, serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* ── Header ── */
+  header {
+    width: 100%;
+    max-width: 680px;
+    border-top: 2.5px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 0.6rem 0;
+    margin-bottom: 2.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  header .brand {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  header .section-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    font-family: var(--mono);
+  }
+
+  /* ── Main card ── */
+  .card {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--ink-light);
+    margin-bottom: 2.4rem;
+    font-style: italic;
+  }
+
+  /* ── Formula block ── */
+  .formula-block {
+    background: var(--bg-tint);
+    border-left: 3px solid var(--accent);
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 2.4rem;
+    border-radius: 0 4px 4px 0;
+  }
+  .formula-block .formula-label {
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 0.5rem;
+  }
+  .formula-block .formula {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+  .formula-block .formula span.frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    margin: 0 0.15em;
+  }
+  .formula-block .formula span.frac .num,
+  .formula-block .formula span.frac .den {
+    display: block;
+    text-align: center;
+    padding: 0 0.2em;
+  }
+  .formula-block .formula span.frac .num {
+    border-bottom: 1px solid var(--ink);
+  }
+  .formula-note {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* ── Inputs ── */
+  .inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem 2rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 520px) {
+    .inputs-grid { grid-template-columns: 1fr; }
+  }
+
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+  .field label {
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+  .field label span.sym {
+    font-style: italic;
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--ink);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1.5px solid var(--ink);
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  .input-row:focus-within { border-color: var(--accent); }
+
+  .input-row input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    padding: 0.35rem 0.1rem;
+    color: var(--ink);
+    width: 0; /* allows flex shrink */
+  }
+  .input-row input::placeholder { color: #bbb; }
+
+  .input-row select {
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--rule);
+    outline: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    padding: 0.35rem 0.3rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 1rem;
+  }
+
+  /* ── Button ── */
+  .btn-row { margin-bottom: 2.4rem; }
+  button.calc {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0.7rem 2rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  button.calc:hover { background: var(--accent); }
+  button.calc:active { transform: translateY(1px); }
+
+  button.reset {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink-light);
+    border: 1px solid var(--rule);
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    margin-left: 0.8rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  button.reset:hover { border-color: var(--ink-light); color: var(--ink); }
+
+  /* ── Result ── */
+  .result-block {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.6rem;
+    display: none;
+    animation: fadeIn 0.35s ease;
+  }
+  .result-block.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-label {
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .result-main {
+    font-family: var(--mono);
+    font-size: 1.9rem;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .result-main .unit {
+    font-size: 1rem;
+    color: var(--ink-light);
+    margin-left: 0.3em;
+  }
+
+  .result-solar {
+    margin-top: 0.6rem;
+    font-size: 1rem;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+  .result-solar strong { color: var(--accent); font-style: normal; }
+
+  /* ── Error ── */
+  .error-msg {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-top: 0.6rem;
+    display: none;
+  }
+  .error-msg.visible { display: block; }
+
+  /* ── Comparison bar ── */
+  .compare-section {
+    margin-top: 1.8rem;
+    display: none;
+  }
+  .compare-section.visible { display: block; }
+
+  .compare-label {
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 0.8rem;
+  }
+
+  .compare-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .compare-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.85rem;
+  }
+  .compare-item .c-name {
+    font-style: italic;
+    color: var(--ink-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .compare-item .c-bar-wrap {
+    height: 6px;
+    background: var(--bg-tint);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .compare-item .c-bar {
+    height: 100%;
+    background: var(--rule);
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+  .compare-item.highlight .c-bar { background: var(--accent); }
+  .compare-item .c-val {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    text-align: right;
+  }
+  .compare-item.highlight .c-name,
+  .compare-item.highlight .c-val { color: var(--ink); font-weight: 500; }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 4rem;
+    width: 100%;
+    max-width: 680px;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.8rem;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    color: var(--ink-light);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">Con F de Física</span>
+  <span class="section-label">Herramientas · Mecánica Orbital</span>
+</header>
+
+<div class="card">
+
+  <h1>Masa de una <em>estrella</em></h1>
+  <p class="subtitle">A partir de la velocidad y el radio orbital de un cuerpo en órbita circular</p>
+
+  <div class="formula-block">
+    <div class="formula-label">Fórmula empleada</div>
+    <div class="formula">
+      M = v² · r / G
+    </div>
+    <div class="formula-note">
+      Equilibrio entre fuerza gravitatoria y centrípeta en órbita circular:
+      GM/r² = v²/r
+    </div>
+  </div>
+
+  <div class="inputs-grid">
+    <div class="field">
+      <label>Velocidad orbital <span class="sym">v</span></label>
+      <div class="input-row">
+        <input type="number" id="vel" placeholder="p.ej. 29.78" min="0" step="any">
+        <select id="vel-unit">
+          <option value="1000">km/s</option>
+          <option value="1" selected>m/s</option>
+          <option value="0.27778">km/h</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Radio orbital <span class="sym">r</span></label>
+      <div class="input-row">
+        <input type="number" id="rad" placeholder="p.ej. 1.496" min="0" step="any">
+        <select id="rad-unit">
+          <option value="1.496e11" selected>UA</option>
+          <option value="1e9">Gm</option>
+          <option value="1e6">Mm</option>
+          <option value="1e3">km</option>
+          <option value="1">m</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="calc" onclick="calcular()">Calcular masa</button>
+    <button class="reset" onclick="resetear()">Limpiar</button>
+  </div>
+
+  <div class="error-msg" id="error"></div>
+
+  <div class="result-block" id="result">
+    <div class="result-label">Masa resultante</div>
+    <div class="result-main" id="res-si">— <span class="unit">kg</span></div>
+    <div class="result-solar" id="res-solar"></div>
+
+    <div class="compare-section" id="compare">
+      <div class="compare-label" style="margin-top:1.4rem">Comparación con estrellas conocidas</div>
+      <div class="compare-list" id="compare-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>G = 6.674 × 10⁻¹¹ N·m²·kg⁻²</span>
+  <span>M☉ = 1.989 × 10³⁰ kg</span>
+</footer>
+
+<script>
+const G = 6.674e-11;
+const M_SOL = 1.989e30;
+
+const STARS = [
+  { name: "Próxima Cen.", mass: 0.1221 },
+  { name: "Barnard",      mass: 0.144  },
+  { name: "Sirio A",      mass: 2.063  },
+  { name: "Sol",          mass: 1.0    },
+  { name: "Arturo",       mass: 1.08   },
+  { name: "Vega",         mass: 2.135  },
+  { name: "Rigel",        mass: 21.0   },
+  { name: "Betelgeuse",   mass: 11.6   },
+];
+
+function formatSI(val) {
+  if (val === 0) return "0";
+  const exp = Math.floor(Math.log10(Math.abs(val)));
+  const coeff = val / Math.pow(10, exp);
+  return `${coeff.toFixed(4)} × 10<sup>${exp}</sup>`;
+}
+
+function calcular() {
+  const errEl  = document.getElementById('error');
+  const resEl  = document.getElementById('result');
+
+  errEl.classList.remove('visible');
+  resEl.classList.remove('visible');
+
+  const vRaw = parseFloat(document.getElementById('vel').value);
+  const rRaw = parseFloat(document.getElementById('rad').value);
+
+  if (isNaN(vRaw) || isNaN(rRaw)) {
+    errEl.textContent = "Introduce valores numéricos en ambos campos.";
+    errEl.classList.add('visible');
+    return;
+  }
+  if (vRaw <= 0 || rRaw <= 0) {
+    errEl.textContent = "Los valores deben ser positivos y no nulos.";
+    errEl.classList.add('visible');
+    return;
+  }
+
+  const vFactor = parseFloat(document.getElementById('vel-unit').value);
+  const rFactor = parseFloat(document.getElementById('rad-unit').value);
+
+  const v = vRaw * vFactor; // m/s
+  const r = rRaw * rFactor; // m
+
+  const M = (v * v * r) / G;
+  const M_solar = M / M_SOL;
+
+  document.getElementById('res-si').innerHTML =
+    formatSI(M) + ' <span class="unit">kg</span>';
+
+  document.getElementById('res-solar').innerHTML =
+    'Equivale a <strong>' + M_solar.toFixed(3) + ' M<sub>☉</sub></strong>';
+
+  // Comparación
+  buildComparison(M_solar);
+
+  resEl.classList.add('visible');
+}
+
+function buildComparison(M_solar) {
+  const list    = document.getElementById('compare-list');
+  const section = document.getElementById('compare');
+  list.innerHTML = '';
+
+  const all = [...STARS, { name: "Tu resultado", mass: M_solar, highlight: true }];
+  all.sort((a, b) => a.mass - b.mass);
+
+  const maxM = Math.max(...all.map(s => s.mass));
+
+  all.forEach(star => {
+    const pct = Math.min((star.mass / maxM) * 100, 100);
+    const item = document.createElement('div');
+    item.className = 'compare-item' + (star.highlight ? ' highlight' : '');
+    item.innerHTML = `
+      <span class="c-name">${star.name}</span>
+      <div class="c-bar-wrap"><div class="c-bar" style="width:0%" data-w="${pct.toFixed(1)}%"></div></div>
+      <span class="c-val">${star.mass.toFixed(3)} M☉</span>
+    `;
+    list.appendChild(item);
+  });
+
+  section.classList.add('visible');
+
+  // Animate bars after paint
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.c-bar').forEach(bar => {
+      bar.style.width = bar.dataset.w;
+    });
+  });
+}
+
+function resetear() {
+  document.getElementById('vel').value = '';
+  document.getElementById('rad').value = '';
+  document.getElementById('result').classList.remove('visible');
+  document.getElementById('error').classList.remove('visible');
+  document.getElementById('compare').classList.remove('visible');
+}
+
+// Enter key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') calcular();
+});
+</script>
+</body>
+</html>
