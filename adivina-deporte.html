@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adivina el deporte — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0f0f13;
+  --bg2:     #17171e;
+  --bg3:     #1e1e28;
+  --border:  rgba(255,255,255,0.08);
+  --text:    #f0f0f0;
+  --muted:   #888;
+  --accent:  #f0c040;
+  --correct: #3ecf8e;
+  --wrong:   #f05a5a;
+  --bebas:   'Bebas Neue', sans-serif;
+  --sans:    'DM Sans', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 4rem;
+}
+
+/* ── HEADER ── */
+header {
+  width: 100%;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-brand {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b2e00;
+}
+.header-brand span {
+  color: #c44a00;
+  font-style: italic;
+  font-family: 'DM Sans', sans-serif;
+}
+.header-back {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.header-back:hover { color: var(--text); }
+
+/* ── HERO ── */
+.game-hero {
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  max-width: 700px;
+  width: 100%;
+}
+.game-hero h1 {
+  font-family: var(--bebas);
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.game-hero p {
+  color: var(--muted);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* ── SCORE BAR ── */
+.score-bar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem 0 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.score-item { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+.score-val { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.score-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.score-sep { width: 1px; height: 36px; background: var(--border); }
+
+/* ── CARD ── */
+.game-card {
+  width: 100%;
+  max-width: 700px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 1rem;
+}
+
+/* ── CHART AREA ── */
+.chart-wrap {
+  padding: 1.5rem 1.5rem 0.5rem;
+  position: relative;
+}
+.chart-title {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+canvas#chart {
+  width: 100%;
+  height: 260px;
+  display: block;
+  border-radius: 6px;
+}
+
+/* ── OPTIONS ── */
+.options-wrap {
+  padding: 1.2rem 1.5rem 1.5rem;
+}
+.options-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+@media (max-width: 480px) {
+  .options-grid { grid-template-columns: 1fr; }
+}
+
+.opt-btn {
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(240,192,64,0.07);
+  transform: translateY(-1px);
+}
+.opt-btn:disabled { cursor: default; }
+.opt-btn.correct {
+  border-color: var(--correct);
+  background: rgba(62,207,142,0.12);
+  color: var(--correct);
+}
+.opt-btn.wrong {
+  border-color: var(--wrong);
+  background: rgba(240,90,90,0.1);
+  color: var(--wrong);
+  opacity: 0.7;
+}
+.opt-emoji { font-size: 1.2rem; }
+
+/* ── FEEDBACK ── */
+.feedback {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: none;
+  animation: popIn 0.3s ease;
+}
+.feedback.visible { display: block; }
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.feedback-result {
+  font-family: var(--bebas);
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+.feedback-result.ok  { color: var(--correct); }
+.feedback-result.bad { color: var(--wrong); }
+.feedback-explain {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+.btn-next {
+  font-family: var(--bebas);
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  background: var(--accent);
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.8rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn-next:hover { opacity: 0.85; }
+.btn-next:active { transform: scale(0.97); }
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  padding: 0 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── END SCREEN ── */
+.end-screen {
+  display: none;
+  text-align: center;
+  padding: 3rem 2rem;
+  max-width: 500px;
+  width: 100%;
+}
+.end-screen.visible { display: block; animation: popIn 0.4s ease; }
+.end-trophy { font-size: 4rem; margin-bottom: 1rem; }
+.end-title {
+  font-family: var(--bebas);
+  font-size: 3rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.end-score {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+.end-score strong { color: var(--text); font-size: 1.4rem; }
+.btn-restart {
+  font-family: var(--bebas);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  background: var(--accent);
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-restart:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="header-brand">Con <span>F</span> de Física</span>
+  <a href="index.html" class="header-back">← Volver</a>
+</header>
+
+<div class="game-hero">
+  <h1>Adivina el deporte</h1>
+  <p>Analiza la gráfica de velocidad y descubre qué deporte es</p>
+</div>
+
+<div class="score-bar">
+  <div class="score-item">
+    <span class="score-val" id="sc-correct">0</span>
+    <span class="score-label">Correctas</span>
+  </div>
+  <div class="score-sep"></div>
+  <div class="score-item">
+    <span class="score-val" id="sc-total">0</span>
+    <span class="score-label">Jugadas</span>
+  </div>
+  <div class="score-sep"></div>
+  <div class="score-item">
+    <span class="score-val" id="sc-pct">—</span>
+    <span class="score-label">Acierto</span>
+  </div>
+</div>
+
+<div class="game-card" id="game-card">
+  <div class="chart-wrap">
+    <div class="chart-title">Velocidad instantánea (m/s) vs. Tiempo (s)</div>
+    <canvas id="chart"></canvas>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="progress-text" id="progress-text">1 / 10</span>
+  </div>
+  <div class="options-wrap">
+    <div class="options-label">¿Qué deporte es?</div>
+    <div class="options-grid" id="options-grid"></div>
+  </div>
+  <div class="feedback" id="feedback">
+    <div class="feedback-result" id="fb-result"></div>
+    <div class="feedback-explain" id="fb-explain"></div>
+    <button class="btn-next" id="btn-next">Siguiente →</button>
+  </div>
+</div>
+
+<div class="end-screen" id="end-screen">
+  <div class="end-trophy" id="end-trophy">🏆</div>
+  <div class="end-title" id="end-title">¡Bien jugado!</div>
+  <div class="end-score" id="end-score"></div>
+  <button class="btn-restart" onclick="restartGame()">Jugar de nuevo</button>
+</div>
+
+<script>
+// ── SPORT DATA ──
+const SPORTS = [
+  {
+    name: "Fútbol",
+    emoji: "⚽",
+    color: "#4caf50",
+    explain: "En fútbol los jugadores alternan sprints cortos (~8m/s) con períodos de trote o parada. Muchos picos de velocidad de corta duración separados por bajadas.",
+    generate: () => {
+      const d = []; let t = 0;
+      while(t < 90) {
+        const base = 1.5 + Math.random()*1.5;
+        for(let i=0;i<(Math.random()<0.25?15:8);i++) d.push({x:t++, y: base + Math.random()*1.5});
+        if(Math.random()<0.35){ const sprint = 6+Math.random()*2.5; for(let i=0;i<5+Math.random()*5;i++) d.push({x:t++, y: sprint - i*0.3 + Math.random()*0.5}); }
+        if(Math.random()<0.2) for(let i=0;i<3+Math.random()*4;i++) d.push({x:t++, y: 0.2+Math.random()*0.3});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Baloncesto",
+    emoji: "🏀",
+    color: "#ff9800",
+    explain: "El baloncesto tiene paradas y arranques muy frecuentes: velocidades altas alternadas con paradas casi completas cada pocos segundos, en una pista pequeña.",
+    generate: () => {
+      const d = []; let t = 0;
+      while(t < 90) {
+        const v = Math.random()<0.4 ? 0.1+Math.random()*0.4 : 3+Math.random()*4;
+        const dur = Math.random()<0.4 ? 2+Math.random()*3 : 1+Math.random()*2;
+        for(let i=0;i<dur;i++) d.push({x:t++, y: v + Math.random()*0.8});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Tenis",
+    emoji: "🎾",
+    color: "#cddc39",
+    explain: "El tenis tiene ráfagas muy explosivas de 2-5 segundos (sprints de hasta 9m/s) seguidas de pausas largas entre puntos. Patrón muy irregular.",
+    generate: () => {
+      const d = []; let t = 0;
+      while(t < 90) {
+        // pausa entre puntos
+        const pause = 8+Math.random()*12;
+        for(let i=0;i<pause;i++) d.push({x:t++, y: 0.1+Math.random()*0.3});
+        // punto: explosión breve
+        const peak = 5+Math.random()*4;
+        for(let i=0;i<3+Math.random()*4;i++) d.push({x:t++, y: peak - i*0.5 + Math.random()*0.8});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Ciclismo",
+    emoji: "🚴",
+    color: "#03a9f4",
+    explain: "El ciclismo muestra velocidades relativamente altas y sostenidas (8-14m/s), con variaciones suaves por pendiente o viento. Sin paradas bruscas.",
+    generate: () => {
+      const d = []; let t = 0; let v = 10+Math.random()*2;
+      while(t < 90) {
+        v += (Math.random()-0.48)*0.8;
+        v = Math.max(6, Math.min(16, v));
+        d.push({x:t++, y: v + Math.random()*0.5});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Natación",
+    emoji: "🏊",
+    color: "#00bcd4",
+    explain: "La natación tiene velocidades bajas y sostenidas (1.5-2.2m/s), con un patrón muy regular y oscilaciones de la brazada. Subida al girar en pared.",
+    generate: () => {
+      const d = []; let t = 0; let phase = 0;
+      while(t < 90) {
+        const base = 1.7 + Math.sin(phase)*0.3;
+        phase += 0.4;
+        // wall turns
+        const turn = t%25 < 2;
+        d.push({x:t++, y: turn ? base+0.5 : base + Math.sin(phase*3)*0.15 + Math.random()*0.1});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Rugby",
+    emoji: "🏉",
+    color: "#8bc34a",
+    explain: "El rugby mezcla contacto físico intenso (casi parado) con carreras largas (hasta 9m/s). Más paradas brutas que el fútbol y sprints más sostenidos.",
+    generate: () => {
+      const d = []; let t = 0;
+      while(t < 90) {
+        if(Math.random()<0.3){
+          for(let i=0;i<4+Math.random()*6;i++) d.push({x:t++, y:0.3+Math.random()*0.5});
+        } else if(Math.random()<0.4){
+          const s = 5+Math.random()*4;
+          for(let i=0;i<6+Math.random()*10;i++) d.push({x:t++, y:s+Math.random()*1.2});
+        } else {
+          for(let i=0;i<4+Math.random()*6;i++) d.push({x:t++, y:2+Math.random()*2});
+        }
+      }
+      return d;
+    }
+  },
+  {
+    name: "F1 / Motor",
+    emoji: "🏎️",
+    color: "#f44336",
+    explain: "En F1 las velocidades son enormes (50-90 m/s). Las frenadas son caídas brutas y rapidísimas antes de curva, y las aceleraciones son rampas pronunciadas.",
+    generate: () => {
+      const d = []; let t = 0; let v = 60;
+      while(t < 90) {
+        if(Math.random()<0.15){
+          // braking zone
+          for(let i=0;i<4+Math.random()*4;i++){ v = Math.max(20, v-8-Math.random()*4); d.push({x:t++,y:v}); }
+          // apex & exit
+          for(let i=0;i<3+Math.random()*3;i++){ v = Math.min(90, v+6+Math.random()*4); d.push({x:t++,y:v}); }
+        } else {
+          v += (Math.random()-0.4)*3;
+          v = Math.max(50, Math.min(90, v));
+          d.push({x:t++, y:v+Math.random()*2});
+        }
+      }
+      return d;
+    }
+  },
+  {
+    name: "Atletismo 100m",
+    emoji: "🏃",
+    color: "#e91e63",
+    explain: "Los 100m son una aceleración explosiva desde 0 hasta ~10-12m/s en los primeros segundos, luego velocidad máxima sostenida y ligera caída al final.",
+    generate: () => {
+      const d = [];
+      for(let t=0;t<12;t++){
+        let v;
+        if(t<0.5) v = 0;
+        else if(t<5) v = 12*(1-Math.exp(-t/1.5));
+        else v = 10.5 - (t-5)*0.1;
+        d.push({x:t, y: Math.max(0,v)+Math.random()*0.3});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Esquí alpino",
+    emoji: "⛷️",
+    color: "#7c4dff",
+    explain: "El esquí alpino muestra aceleración continua cuesta abajo (hasta 30m/s) con frenadas bruscas en las puertas. Velocidades mucho más altas que los deportes de equipo.",
+    generate: () => {
+      const d = []; let t=0; let v=5;
+      while(t<90){
+        if(Math.random()<0.12){
+          for(let i=0;i<2+Math.random()*3;i++){ v=Math.max(8,v-4-Math.random()*3); d.push({x:t++,y:v}); }
+        } else {
+          v = Math.min(30, v+0.4+Math.random()*0.5);
+          d.push({x:t++, y:v+Math.random()*1});
+        }
+      }
+      return d;
+    }
+  },
+  {
+    name: "Boxeo",
+    emoji: "🥊",
+    color: "#ff5722",
+    explain: "En boxeo la velocidad del boxeador es baja casi siempre (movimiento de pies), con picos muy breves y rápidos en los golpes. Patrón de pulsos estrechos.",
+    generate: () => {
+      const d = []; let t=0;
+      while(t<90){
+        d.push({x:t++, y:0.5+Math.random()*1.2});
+        if(Math.random()<0.08){
+          d.push({x:t++, y:5+Math.random()*4});
+          d.push({x:t++, y:1+Math.random()*1.5});
+        }
+      }
+      return d;
+    }
+  },
+  {
+    name: "Marcha atlética",
+    emoji: "🚶",
+    color: "#009688",
+    explain: "La marcha atlética mantiene una velocidad muy constante (~2.5m/s) con oscilaciones mínimas del paso. Sin sprints ni paradas, como un metrónomo.",
+    generate: () => {
+      const d = []; let t=0; let phase=0;
+      while(t<90){
+        phase+=0.5;
+        d.push({x:t++, y:2.4+Math.sin(phase)*0.12+Math.random()*0.08});
+      }
+      return d;
+    }
+  },
+  {
+    name: "Volleyball",
+    emoji: "🏐",
+    color: "#ffeb3b",
+    explain: "El volleyball tiene paradas frecuentes entre puntos (juego estático esperando el saque) y breves explosiones al rematar o bloquear.",
+    generate: () => {
+      const d = []; let t=0;
+      while(t<90){
+        for(let i=0;i<5+Math.random()*10;i++) d.push({x:t++,y:0.1+Math.random()*0.4});
+        for(let i=0;i<2+Math.random()*4;i++) d.push({x:t++,y:2+Math.random()*3});
+      }
+      return d;
+    }
+  },
+];
+
+// ── GAME STATE ──
+const ROUNDS = 10;
+let queue = [], round = 0, score = 0, answered = false;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function buildQueue() {
+  return shuffle(SPORTS).slice(0, ROUNDS);
+}
+
+// ── CHART ──
+let chartCtx, animFrame;
+
+function drawChart(data, color) {
+  const canvas = document.getElementById('chart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  ctx.scale(dpr, dpr);
+
+  const pad = { top:20, right:20, bottom:40, left:50 };
+  const cw = W - pad.left - pad.right;
+  const ch = H - pad.top - pad.bottom;
+
+  const xs = data.map(d=>d.x), ys = data.map(d=>d.y);
+  const xMin=Math.min(...xs), xMax=Math.max(...xs);
+  const yMin=0, yMax=Math.max(...ys)*1.1;
+
+  const px = x => pad.left + (x-xMin)/(xMax-xMin)*cw;
+  const py = y => pad.top + ch - (y-yMin)/(yMax-yMin)*ch;
+
+  // background
+  ctx.fillStyle = '#17171e';
+  ctx.fillRect(0,0,W,H);
+
+  // grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for(let i=0;i<=4;i++){
+    const y = pad.top + ch*i/4;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+cw,y); ctx.stroke();
+  }
+  for(let i=0;i<=5;i++){
+    const x = pad.left + cw*i/5;
+    ctx.beginPath(); ctx.moveTo(x,pad.top); ctx.lineTo(x,pad.top+ch); ctx.stroke();
+  }
+
+  // axes labels
+  ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.font=`10px 'JetBrains Mono', monospace`;
+  ctx.textAlign='right';
+  for(let i=0;i<=4;i++){
+    const val = yMin + (yMax-yMin)*(4-i)/4;
+    ctx.fillText(val.toFixed(1), pad.left-6, pad.top+ch*i/4+4);
+  }
+  ctx.textAlign='center';
+  for(let i=0;i<=5;i++){
+    const val = xMin + (xMax-xMin)*i/5;
+    ctx.fillText(Math.round(val)+'s', pad.left+cw*i/5, pad.top+ch+16);
+  }
+
+  // axis labels
+  ctx.fillStyle='rgba(255,255,255,0.4)';
+  ctx.font=`10px 'JetBrains Mono', monospace`;
+  ctx.save(); ctx.translate(14, pad.top+ch/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center'; ctx.fillText('v (m/s)',0,0); ctx.restore();
+  ctx.textAlign='center';
+  ctx.fillText('t (s)', pad.left+cw/2, H-4);
+
+  // gradient fill
+  const grad = ctx.createLinearGradient(0,pad.top,0,pad.top+ch);
+  grad.addColorStop(0, color+'55');
+  grad.addColorStop(1, color+'00');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(px(data[0].x), py(0));
+  data.forEach(d => ctx.lineTo(px(d.x), py(d.y)));
+  ctx.lineTo(px(data[data.length-1].x), py(0));
+  ctx.closePath();
+  ctx.fill();
+
+  // line
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  data.forEach((d,i) => i===0 ? ctx.moveTo(px(d.x),py(d.y)) : ctx.lineTo(px(d.x),py(d.y)));
+  ctx.stroke();
+}
+
+// ── OPTIONS ──
+function buildOptions(correct) {
+  const others = shuffle(SPORTS.filter(s=>s.name!==correct.name)).slice(0,3);
+  return shuffle([correct, ...others]);
+}
+
+// ── RENDER ROUND ──
+function renderRound() {
+  answered = false;
+  const sport = queue[round];
+  const data = sport.generate();
+  const options = buildOptions(sport);
+
+  drawChart(data, sport.color);
+
+  // progress
+  document.getElementById('progress-fill').style.width = `${(round/ROUNDS)*100}%`;
+  document.getElementById('progress-text').textContent = `${round+1} / ${ROUNDS}`;
+
+  // options
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-emoji">${opt.emoji}</span> ${opt.name}`;
+    btn.onclick = () => handleAnswer(opt, sport, options);
+    grid.appendChild(btn);
+  });
+
+  // hide feedback
+  const fb = document.getElementById('feedback');
+  fb.classList.remove('visible');
+}
+
+// ── ANSWER ──
+function handleAnswer(chosen, correct, options) {
+  if(answered) return;
+  answered = true;
+
+  const isCorrect = chosen.name === correct.name;
+  if(isCorrect) score++;
+
+  // disable all btns and color them
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.disabled = true;
+    const name = btn.textContent.trim().replace(/^.\s/,'');
+    if(name === correct.name) btn.classList.add('correct');
+    else if(name === chosen.name && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // feedback
+  const fb = document.getElementById('feedback');
+  const res = document.getElementById('fb-result');
+  const exp = document.getElementById('fb-explain');
+  res.textContent = isCorrect ? '¡Correcto! 🎉' : `Era ${correct.emoji} ${correct.name}`;
+  res.className = 'feedback-result ' + (isCorrect ? 'ok' : 'bad');
+  exp.textContent = correct.explain;
+  fb.classList.add('visible');
+
+  updateScore();
+}
+
+// ── SCORE ──
+function updateScore() {
+  const total = round + 1;
+  document.getElementById('sc-correct').textContent = score;
+  document.getElementById('sc-total').textContent = total;
+  const pct = Math.round(score/total*100);
+  document.getElementById('sc-pct').textContent = pct + '%';
+}
+
+// ── NEXT ──
+document.getElementById('btn-next').onclick = () => {
+  round++;
+  if(round >= ROUNDS) {
+    showEnd();
+  } else {
+    renderRound();
+  }
+};
+
+// ── END ──
+function showEnd() {
+  document.getElementById('game-card').style.display = 'none';
+  const end = document.getElementById('end-screen');
+  end.classList.add('visible');
+
+  const pct = Math.round(score/ROUNDS*100);
+  let trophy = '🥉', title = '¡Sigue practicando!';
+  if(pct>=90){ trophy='🏆'; title='¡Físico de élite!'; }
+  else if(pct>=70){ trophy='🥇'; title='¡Muy bien!'; }
+  else if(pct>=50){ trophy='🥈'; title='¡Nada mal!'; }
+
+  document.getElementById('end-trophy').textContent = trophy;
+  document.getElementById('end-title').textContent = title;
+  document.getElementById('end-score').innerHTML =
+    `Has acertado <strong>${score} de ${ROUNDS}</strong> deportes (${pct}%)`;
+}
+
+// ── RESTART ──
+function restartGame() {
+  score = 0; round = 0;
+  queue = buildQueue();
+  document.getElementById('sc-correct').textContent = '0';
+  document.getElementById('sc-total').textContent = '0';
+  document.getElementById('sc-pct').textContent = '—';
+  document.getElementById('game-card').style.display = 'block';
+  document.getElementById('end-screen').classList.remove('visible');
+  renderRound();
+}
+
+// ── INIT ──
+queue = buildQueue();
+renderRound();
+
+// Redraw on resize
+window.addEventListener('resize', () => {
+  if(!answered) renderRound();
+});
+</script>
+</body>
+</html>
