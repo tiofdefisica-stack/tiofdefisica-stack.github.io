@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolución Orbital Lunar — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1395XCX0L');
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--bg2:#0e0e1a;--bg3:#141425;
+  --border:rgba(255,255,255,0.08);--text:#e8e8f0;--muted:#6a6a88;
+  --accent:#c8a84b;--snap:#e05555;--now:#4ecb8d;
+  --serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:16px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+header{border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.95)}
+.brand{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.back{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.hero{text-align:center;padding:2rem 1.5rem 1.2rem}
+.hero-tag{font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.hero h1{font-size:clamp(1.4rem,5vw,2.4rem);font-weight:500;font-style:italic;margin-bottom:.3rem}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero-sub{font-size:.88rem;color:var(--muted);font-style:italic}
+.container{max-width:860px;margin:0 auto;padding:1rem 1rem 4rem}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:1rem}
+.card-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.params-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.9rem}
+.param-label{display:flex;justify-content:space-between;margin-bottom:.25rem}
+.param-name{font-size:.82rem;color:var(--text)}
+.param-val{font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--bg3);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer}
+.param-hint{font-size:.68rem;color:var(--muted);font-style:italic;margin-top:.18rem}
+.btn-reset{margin-top:.9rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:.4rem .9rem;cursor:pointer}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.legend-item{display:flex;align-items:center;gap:.35rem;font-size:.75rem;color:var(--muted)}
+.legend-dot{width:18px;height:2px;border-radius:1px}
+.values-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem}
+@media(max-width:480px){.values-strip{grid-template-columns:repeat(2,1fr)}}
+.val-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem}
+.vcl{font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+.vcn{font-family:var(--mono);font-size:.9rem;color:var(--accent);font-weight:500}
+.vcu{font-size:.65rem;color:var(--muted);margin-left:.12em}
+.time-header{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.55rem}
+.time-header span{color:var(--now)}
+.chart-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.7rem}
+.chart-tab{font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:.28rem .65rem;cursor:pointer;transition:all .15s}
+.chart-tab.active{background:var(--accent);color:#111;border-color:var(--accent)}
+.chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.9rem .9rem .4rem;margin-bottom:1rem}
+.chart-title-label{font-size:.88rem;font-style:italic;color:var(--text);margin-bottom:.5rem}
+.chart-wrap svg{display:block;width:100%;overflow:visible}
+.mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem}
+@media(max-width:480px){.mini-grid{grid-template-columns:repeat(2,1fr)}}
+.mini-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.45rem .45rem .25rem;cursor:pointer;transition:border-color .2s}
+.mini-wrap.active,.mini-wrap:hover{border-color:var(--accent)}
+.mini-label{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+.mini-wrap.active .mini-label{color:var(--accent)}
+.mini-wrap svg{display:block;width:100%;overflow:visible}
+.snap-box{background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.22);border-radius:8px;padding:.9rem 1.1rem}
+.snap-box-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--snap);margin-bottom:.45rem}
+.snap-box-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+@media(max-width:380px){.snap-box-grid{grid-template-columns:1fr 1fr}}
+.sil{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-bottom:.15rem}
+.siv{font-family:var(--mono);font-size:.88rem;color:var(--snap)}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">Con F de Física</span>
+  <a href="index.html" class="back">← Volver</a>
+</header>
+
+<div class="hero">
+  <p class="hero-tag">Herramienta · Mecánica Orbital</p>
+  <h1>Evolución de la <em>órbita lunar</em></h1>
+  <p class="hero-sub">Dinámica mareal desde el pasado hasta el Snap Point</p>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-title">Parámetros</div>
+    <div class="params-grid">
+      <div>
+        <div class="param-label"><span class="param-name">Factor Q</span><span class="param-val" id="val-Q">26</span></div>
+        <input type="range" id="sl-Q" min="10" max="100" step="1" value="26" oninput="onParam()">
+        <div class="param-hint">LLR: Q ≈ 26</div>
+      </div>
+      <div>
+        <div class="param-label"><span class="param-name">da/dt (cm/año)</span><span class="param-val" id="val-dadt">3.82</span></div>
+        <input type="range" id="sl-dadt" min="1" max="8" step="0.05" value="3.82" oninput="onParam()">
+        <div class="param-hint">LLR: 3.82 cm/año</div>
+      </div>
+      <div>
+        <div class="param-label"><span class="param-name">Excentricidad e₀</span><span class="param-val" id="val-e0">0.0549</span></div>
+        <input type="range" id="sl-e0" min="0.01" max="0.15" step="0.001" value="0.0549" oninput="onParam()">
+        <div class="param-hint">Actual: 0.0549</div>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="resetParams()">↺ Restaurar LLR</button>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Simulación</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--now)"></div>Hoy</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--snap)"></div>Snap Point</div>
+    </div>
+  </div>
+
+  <div class="values-strip">
+    <div class="val-card"><div class="vcl">Semieje a</div><div class="vcn" id="cv-a">384<span class="vcu">Mm</span></div></div>
+    <div class="val-card"><div class="vcl">Excentricidad e</div><div class="vcn" id="cv-e">0.0549</div></div>
+    <div class="val-card"><div class="vcl">δv</div><div class="vcn" id="cv-dv">—<span class="vcu">m/s</span></div></div>
+    <div class="val-card"><div class="vcl">Período T</div><div class="vcn" id="cv-T">27.32<span class="vcu">días</span></div></div>
+  </div>
+
+  <div class="card">
+    <div class="time-header"><span>Explorar en el tiempo</span><span id="time-label">Hoy</span></div>
+    <input type="range" id="sl-time" min="0" max="1" step="0.002" value="0.22" oninput="onTime()" style="width:100%">
+  </div>
+
+  <div class="chart-tabs">
+    <button class="chart-tab active" onclick="setMain(0)">a(t)</button>
+    <button class="chart-tab" onclick="setMain(1)">e(t)</button>
+    <button class="chart-tab" onclick="setMain(2)">δv(t)</button>
+    <button class="chart-tab" onclick="setMain(3)">T(t)</button>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title-label" id="main-title">Semieje mayor <em>a</em>(t)</div>
+    <svg id="main-svg" viewBox="0 0 600 220"></svg>
+  </div>
+
+  <div class="mini-grid">
+    <div class="mini-wrap active" id="mw-0" onclick="setMain(0)">
+      <div class="mini-label">a(t) Mm</div>
+      <svg id="mini-svg-0" viewBox="0 0 150 60"></svg>
+    </div>
+    <div class="mini-wrap" id="mw-1" onclick="setMain(1)">
+      <div class="mini-label">e(t)</div>
+      <svg id="mini-svg-1" viewBox="0 0 150 60"></svg>
+    </div>
+    <div class="mini-wrap" id="mw-2" onclick="setMain(2)">
+      <div class="mini-label">δv m/s</div>
+      <svg id="mini-svg-2" viewBox="0 0 150 60"></svg>
+    </div>
+    <div class="mini-wrap" id="mw-3" onclick="setMain(3)">
+      <div class="mini-label">T días</div>
+      <svg id="mini-svg-3" viewBox="0 0 150 60"></svg>
+    </div>
+  </div>
+
+  <div class="snap-box">
+    <div class="snap-box-title">⚡ Snap Point</div>
+    <div class="snap-box-grid">
+      <div><div class="sil">Tiempo desde hoy</div><div class="siv" id="snap-t">—</div></div>
+      <div><div class="sil">Semieje a</div><div class="siv" id="snap-a">—</div></div>
+      <div><div class="sil">Excentricidad</div><div class="siv" id="snap-e">—</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const G=6.674e-11,ME=5.972e24,MM=7.342e22,RE=6.371e6,a0=3.844e8,SPY=3.156e7;
+const kepV=a=>Math.sqrt(G*(ME+MM)/a);
+const kepT=a=>2*Math.PI*Math.sqrt(a**3/(G*(ME+MM)));
+
+function simulate(dadt_cm,e0){
+  const d0=dadt_cm/100/SPY;
+  const N=300,ts=-4.5,te=16,dg=(te-ts)/N,ds=dg*1e9*SPY;
+  const i0=Math.round(-ts/dg);
+  let a=a0,e=e0;
+  const ft=[],fa=[],fe=[];
+  for(let i=i0;i<=N;i++){
+    ft.push(+(ts+i*dg).toFixed(3));fa.push(a);fe.push(e);
+    const da=d0*Math.pow(a0/a,5.5)*ds;
+    a=Math.max(a+da,RE*2);e=Math.max(0,e-e*(da/a)*4.5);
+  }
+  a=a0;e=e0;
+  const bt=[],ba=[],be=[];
+  for(let i=i0;i>=0;i--){
+    bt.push(+(ts+i*dg).toFixed(3));ba.push(a);be.push(e);
+    const da=d0*Math.pow(a0/a,5.5)*ds;
+    a=Math.max(a-da,RE*2);e=Math.min(0.6,e+e*(da/a)*4.5);
+  }
+  const at=[...bt.slice(1).reverse(),...ft];
+  const aa=[...ba.slice(1).reverse(),...fa];
+  const ae=[...be.slice(1).reverse(),...fe];
+  const adv=aa.map((a,i)=>kepV(a)*ae[i]**2/2);
+  const aT=aa.map(a=>kepT(a)/86400);
+  const ti=bt.length-1;
+  let si=ae.length-1;
+  for(let i=ti;i<ae.length;i++){if(ae[i]<0.001){si=i;break;}}
+  return{at,aa,ae,adv,aT,ti,si};
+}
+
+const CFGS=[
+  {key:'aa', s:1e-6, c:'#c8a84b', title:'Semieje mayor <em>a</em>(t)', u:'Mm'},
+  {key:'ae', s:1,    c:'#7eb8d4', title:'Excentricidad <em>e</em>(t)',  u:''},
+  {key:'adv',s:1,    c:'#b07ed4', title:'Velocidad residual <em>δv</em>(t)', u:'m/s'},
+  {key:'aT', s:1,    c:'#4ecb8d', title:'Período orbital <em>T</em>(t)', u:'días'},
+];
+
+let sim=null, mainIdx=0;
+
+function getVals(i){ return sim[CFGS[i].key].map(v=>v*CFGS[i].s); }
+function tidx(){ return Math.round(parseFloat(document.getElementById('sl-time').value)*(sim.at.length-1)); }
+
+// ── SVG CHART BUILDER ──
+function buildSVGChart(svgEl, vals, times, cfg, todayIdx, snapIdx, markerIdx, mini){
+  const W = mini ? 150 : 600;
+  const H = mini ? 60  : 220;
+  const pad = mini
+    ? {top:4, right:4, bottom:4, left:4}
+    : {top:16, right:16, bottom:32, left:52};
+  const cw = W - pad.left - pad.right;
+  const ch = H - pad.top  - pad.bottom;
+
+  const tMin=times[0], tMax=times[times.length-1];
+  const vMax=Math.max(...vals)*1.1||1;
+  const vMin=0;
+
+  const px=t=>pad.left+(t-tMin)/(tMax-tMin)*cw;
+  const py=v=>pad.top+ch-(v-vMin)/(vMax-vMin)*ch;
+
+  let svg = `<rect width="${W}" height="${H}" fill="#0e0e1a"/>`;
+
+  // Grid
+  if(!mini){
+    for(let i=0;i<=4;i++){
+      const y=pad.top+ch*i/4;
+      svg+=`<line x1="${pad.left}" y1="${y}" x2="${pad.left+cw}" y2="${y}" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
+      const v=vMin+(vMax-vMin)*(4-i)/4;
+      svg+=`<text x="${pad.left-4}" y="${y+4}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="rgba(255,255,255,0.3)">${v.toFixed(v<10?2:0)}</text>`;
+    }
+    for(let i=0;i<=6;i++){
+      const x=pad.left+cw*i/6;
+      const t=tMin+(tMax-tMin)*i/6;
+      svg+=`<line x1="${x}" y1="${pad.top}" x2="${x}" y2="${pad.top+ch}" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
+      svg+=`<text x="${x}" y="${pad.top+ch+14}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(255,255,255,0.3)">${t.toFixed(1)} Ga</text>`;
+    }
+    svg+=`<text x="${pad.left+2}" y="${pad.top+10}" font-family="JetBrains Mono" font-size="9" fill="rgba(255,255,255,0.25)">${cfg.u}</text>`;
+  }
+
+  // Shade past
+  const t0x=px(0);
+  svg+=`<rect x="${pad.left}" y="${pad.top}" width="${t0x-pad.left}" height="${ch}" fill="rgba(255,255,255,0.015)"/>`;
+
+  // Area fill
+  let pts=`${px(times[0])},${py(0)} `;
+  times.forEach((t,i)=>pts+=`${px(t)},${py(vals[i])} `);
+  pts+=`${px(times[times.length-1])},${py(0)}`;
+  svg+=`<defs><linearGradient id="g${mainIdx}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${cfg.c}" stop-opacity="0.3"/><stop offset="100%" stop-color="${cfg.c}" stop-opacity="0"/></linearGradient></defs>`;
+  svg+=`<polygon points="${pts}" fill="url(#g${mainIdx})"/>`;
+
+  // Line
+  let d=`M${px(times[0])},${py(vals[0])}`;
+  times.forEach((t,i)=>{ d+=`L${px(t)},${py(vals[i])}`; });
+  svg+=`<path d="${d}" fill="none" stroke="${cfg.c}" stroke-width="${mini?1.5:2}" stroke-linejoin="round"/>`;
+
+  // Today line
+  svg+=`<line x1="${t0x}" y1="${pad.top}" x2="${t0x}" y2="${pad.top+ch}" stroke="#4ecb8d" stroke-width="${mini?1:1.5}" stroke-dasharray="4,4"/>`;
+
+  // Snap line
+  if(snapIdx<times.length){
+    const sx=px(times[snapIdx]);
+    svg+=`<line x1="${sx}" y1="${pad.top}" x2="${sx}" y2="${pad.top+ch}" stroke="#e05555" stroke-width="${mini?1:1.5}" stroke-dasharray="4,4"/>`;
+  }
+
+  // Marker
+  if(markerIdx>=0 && markerIdx<times.length){
+    const mx=px(times[markerIdx]), my=py(vals[markerIdx]);
+    svg+=`<circle cx="${mx}" cy="${my}" r="${mini?3:5}" fill="${cfg.c}" stroke="${mini?'none':'#fff'}" stroke-width="1.5"/>`;
+  }
+
+  svgEl.innerHTML=svg;
+}
+
+function drawAll(){
+  if(!sim)return;
+  const ti2=tidx();
+  // Main
+  const cfg=CFGS[mainIdx];
+  const vals=getVals(mainIdx);
+  buildSVGChart(document.getElementById('main-svg'), vals, sim.at, cfg, sim.ti, sim.si, ti2, false);
+  // Minis
+  CFGS.forEach((_,i)=>{
+    buildSVGChart(document.getElementById(`mini-svg-${i}`), getVals(i), sim.at, CFGS[i], sim.ti, sim.si, ti2, true);
+  });
+  updateCards(ti2);
+  updateSnap();
+}
+
+function updateCards(ti2){
+  const a=sim.aa[ti2],e=sim.ae[ti2],dv=sim.adv[ti2],T=sim.aT[ti2],t=sim.at[ti2];
+  document.getElementById('cv-a').innerHTML=(a/1e6).toFixed(1)+'<span class="vcu">Mm</span>';
+  document.getElementById('cv-e').textContent=e.toFixed(4);
+  document.getElementById('cv-dv').innerHTML=dv.toFixed(2)+'<span class="vcu">m/s</span>';
+  document.getElementById('cv-T').innerHTML=T.toFixed(2)+'<span class="vcu">días</span>';
+  document.getElementById('time-label').textContent=t<-.01?'Hace '+Math.abs(t).toFixed(2)+' Ga':t>.01?'En '+t.toFixed(2)+' Ga':'Hoy';
+}
+
+function updateSnap(){
+  const si=sim.si;
+  document.getElementById('snap-t').textContent=sim.at[si].toFixed(2)+' Ga';
+  document.getElementById('snap-a').textContent=(sim.aa[si]/1e6).toFixed(1)+' Mm';
+  document.getElementById('snap-e').textContent=sim.ae[si].toFixed(4);
+}
+
+function onTime(){
+  if(!sim)return;
+  const ti2=tidx();
+  // Solo redibujar — SVG es ligero
+  drawAll();
+}
+
+function setMain(idx){
+  mainIdx=idx;
+  document.querySelectorAll('.chart-tab').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.mini-wrap').forEach((m,i)=>m.classList.toggle('active',i===idx));
+  document.getElementById('main-title').innerHTML=CFGS[idx].title;
+  drawAll();
+}
+
+let paramTimer=null;
+function onParam(){
+  const dadt=parseFloat(document.getElementById('sl-dadt').value);
+  const e0=parseFloat(document.getElementById('sl-e0').value);
+  const Q=parseFloat(document.getElementById('sl-Q').value);
+  document.getElementById('val-Q').textContent=Q;
+  document.getElementById('val-dadt').textContent=dadt.toFixed(2);
+  document.getElementById('val-e0').textContent=e0.toFixed(4);
+  clearTimeout(paramTimer);
+  paramTimer=setTimeout(()=>{sim=simulate(dadt,e0);drawAll();},350);
+}
+
+function resetParams(){
+  document.getElementById('sl-Q').value=26;
+  document.getElementById('sl-dadt').value=3.82;
+  document.getElementById('sl-e0').value=0.0549;
+  onParam();
+}
+
+sim=simulate(3.82,0.0549);
+drawAll();
+</script>
+</body>
+</html>

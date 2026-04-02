@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transferencia de Hohmann — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1395XCX0L');
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:       #1a1a1a;
+  --ink-light: #555;
+  --rule:      #c8c0b4;
+  --bg:        #faf8f4;
+  --bg-tint:   #f2ede5;
+  --accent:    #8b2e00;
+  --mono:      'JetBrains Mono', monospace;
+  --serif:     'EB Garamond', Georgia, serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem 5rem;
+}
+
+header {
+  width: 100%;
+  max-width: 680px;
+  border-top: 2.5px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 0.6rem 0;
+  margin-bottom: 2.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+header .brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--mono);
+  text-decoration: none;
+}
+header .section-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  font-family: var(--mono);
+}
+
+.card {
+  width: 100%;
+  max-width: 680px;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+h1 em { font-style: italic; color: var(--accent); }
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--ink-light);
+  margin-bottom: 2.4rem;
+  font-style: italic;
+}
+
+/* Formula block */
+.formula-block {
+  background: var(--bg-tint);
+  border-left: 3px solid var(--accent);
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 2.4rem;
+  border-radius: 0 4px 4px 0;
+}
+.formula-label {
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 0.6rem;
+}
+.formula-line {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.formula-note {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Ejemplos */
+.ejemplos-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 0.6rem;
+}
+.ejemplos-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.ej-btn {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  background: var(--bg-tint);
+  border: 1px solid var(--rule);
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: border-color 0.2s;
+  color: var(--ink);
+}
+.ej-btn:hover { border-color: var(--ink); }
+
+/* Inputs */
+.inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 2rem;
+  margin-bottom: 0.8rem;
+}
+@media (max-width: 520px) {
+  .inputs-grid { grid-template-columns: 1fr; }
+}
+
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+.field label {
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.field label span.sym {
+  font-style: italic;
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.input-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1.5px solid var(--ink);
+  transition: border-color 0.2s;
+}
+.input-row:focus-within { border-color: var(--accent); }
+.input-row input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  padding: 0.35rem 0.1rem;
+  color: var(--ink);
+  width: 0;
+}
+.input-row input::placeholder { color: #bbb; }
+.input-row select {
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--rule);
+  outline: none;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink-light);
+  padding: 0.35rem 0.3rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 1rem;
+}
+
+/* Selector de cuerpo central */
+.body-selector {
+  margin-bottom: 1.8rem;
+}
+.body-selector-label {
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 0.5rem;
+}
+.body-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.body-btn {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+  color: var(--ink-light);
+  transition: all 0.15s;
+}
+.body-btn.active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+/* Buttons */
+.btn-row { margin-bottom: 2.4rem; }
+button.calc {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  padding: 0.7rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+button.calc:hover { background: var(--accent); }
+button.calc:active { transform: translateY(1px); }
+button.reset {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--ink-light);
+  border: 1px solid var(--rule);
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  margin-left: 0.8rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+button.reset:hover { border-color: var(--ink-light); color: var(--ink); }
+
+/* Error */
+.error-msg {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: none;
+}
+.error-msg.visible { display: block; }
+
+/* Results */
+.result-block {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.8rem;
+  display: none;
+  animation: fadeIn 0.35s ease;
+}
+.result-block.visible { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+}
+@media (max-width: 480px) {
+  .results-grid { grid-template-columns: 1fr; }
+}
+
+.res-card {
+  background: var(--bg-tint);
+  border: 1px solid var(--rule);
+  padding: 1rem 1.2rem;
+  border-radius: 4px;
+}
+.res-card.highlight {
+  border-color: var(--accent);
+  background: #fff8f5;
+}
+.res-card-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 0.4rem;
+}
+.res-card-val {
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  color: var(--ink);
+  font-weight: 500;
+}
+.res-card.highlight .res-card-val { color: var(--accent); }
+.res-card-unit {
+  font-size: 0.8rem;
+  color: var(--ink-light);
+  margin-left: 0.2em;
+}
+.res-card-note {
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  font-style: italic;
+  margin-top: 0.3rem;
+}
+
+/* Orbit diagram */
+.orbit-diagram {
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+.orbit-diagram svg { max-width: 320px; width: 100%; }
+
+/* Comparison */
+.compare-section { margin-top: 1.2rem; }
+.compare-label {
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 0.8rem;
+}
+
+footer {
+  margin-top: 4rem;
+  width: 100%;
+  max-width: 680px;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.8rem;
+  font-size: 0.78rem;
+  font-family: var(--mono);
+  color: var(--ink-light);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">Con F de Física</a>
+  <span class="section-label">Herramientas · Mecánica Orbital</span>
+</header>
+
+<div class="card">
+  <h1>Transferencia de <em>Hohmann</em></h1>
+  <p class="subtitle">Maniobra de transferencia entre dos órbitas circulares coplanares</p>
+
+  <div class="formula-block">
+    <div class="formula-label">Fórmulas empleadas</div>
+    <div class="formula-line">Δv₁ = √(GM/r₁) · (√(2r₂/(r₁+r₂)) − 1)</div>
+    <div class="formula-line">Δv₂ = √(GM/r₂) · (1 − √(2r₁/(r₁+r₂)))</div>
+    <div class="formula-line">t = π · √((r₁+r₂)³ / (8GM))</div>
+    <div class="formula-note">Válido para órbitas circulares coplanares. El Δv total es la suma de los dos impulsos.</div>
+  </div>
+
+  <!-- Cuerpo central -->
+  <div class="body-selector">
+    <div class="body-selector-label">Cuerpo central</div>
+    <div class="body-btns">
+      <button class="body-btn active" onclick="setBody('sol',this)">☀️ Sol</button>
+      <button class="body-btn" onclick="setBody('tierra',this)">🌍 Tierra</button>
+      <button class="body-btn" onclick="setBody('jupiter',this)">🪐 Júpiter</button>
+      <button class="body-btn" onclick="setBody('marte',this)">🔴 Marte</button>
+    </div>
+  </div>
+
+  <!-- Ejemplos -->
+  <div class="ejemplos-label">Ejemplos reales</div>
+  <div class="ejemplos-row">
+    <button class="ej-btn" onclick="cargarEjemplo(1,1.524,'sol')">🚀 Tierra → Marte</button>
+    <button class="ej-btn" onclick="cargarEjemplo(1,5.203,'sol')">🚀 Tierra → Júpiter</button>
+    <button class="ej-btn" onclick="cargarEjemplo(0.387,1,'sol')">🚀 Mercurio → Tierra</button>
+    <button class="ej-btn" onclick="cargarEjemplo(6.6,42.164,'tierra','km')">🛰️ LEO → GEO</button>
+    <button class="ej-btn" onclick="cargarEjemplo(384.4,385.4,'tierra','Mm')">🌕 Corrección lunar</button>
+  </div>
+
+  <!-- Inputs -->
+  <div class="inputs-grid">
+    <div class="field">
+      <label>Radio órbita inicial <span class="sym">r₁</span></label>
+      <div class="input-row">
+        <input type="number" id="r1" placeholder="p.ej. 1.0" min="0" step="any">
+        <select id="r1-unit">
+          <option value="1.496e11" selected>UA</option>
+          <option value="1e9">Gm</option>
+          <option value="1e6">Mm</option>
+          <option value="1e3">km</option>
+          <option value="1">m</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Radio órbita final <span class="sym">r₂</span></label>
+      <div class="input-row">
+        <input type="number" id="r2" placeholder="p.ej. 1.524" min="0" step="any">
+        <select id="r2-unit">
+          <option value="1.496e11" selected>UA</option>
+          <option value="1e9">Gm</option>
+          <option value="1e6">Mm</option>
+          <option value="1e3">km</option>
+          <option value="1">m</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row" style="margin-top:1.8rem">
+    <button class="calc" onclick="calcular()">Calcular</button>
+    <button class="reset" onclick="resetear()">Limpiar</button>
+  </div>
+
+  <div class="error-msg" id="error"></div>
+
+  <div class="result-block" id="result">
+
+    <!-- Diagrama SVG -->
+    <div class="orbit-diagram">
+      <svg id="orbit-svg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <!-- Se dibuja por JS -->
+      </svg>
+    </div>
+
+    <!-- Resultados -->
+    <div class="results-grid">
+      <div class="res-card">
+        <div class="res-card-label">Δv₁ — Primer impulso</div>
+        <div class="res-card-val" id="res-dv1">—<span class="res-card-unit">m/s</span></div>
+        <div class="res-card-note">Salida de la órbita inicial</div>
+      </div>
+      <div class="res-card">
+        <div class="res-card-label">Δv₂ — Segundo impulso</div>
+        <div class="res-card-val" id="res-dv2">—<span class="res-card-unit">m/s</span></div>
+        <div class="res-card-note">Circularización en órbita final</div>
+      </div>
+      <div class="res-card highlight">
+        <div class="res-card-label">Δv total</div>
+        <div class="res-card-val" id="res-dvt">—<span class="res-card-unit">m/s</span></div>
+        <div class="res-card-note">Coste energético total</div>
+      </div>
+      <div class="res-card">
+        <div class="res-card-label">Tiempo de transferencia</div>
+        <div class="res-card-val" id="res-t">—</div>
+        <div class="res-card-note" id="res-t-note"></div>
+      </div>
+    </div>
+
+    <!-- Velocidades orbitales -->
+    <div style="border-top:1px solid var(--rule);padding-top:1.2rem;margin-top:0.5rem">
+      <div class="compare-label">Velocidades orbitales</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem">
+        <div>
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:0.2rem">v₁ circular</div>
+          <div style="font-family:var(--mono);font-size:1rem;color:var(--ink)" id="res-v1">—</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:0.2rem">v₂ circular</div>
+          <div style="font-family:var(--mono);font-size:1rem;color:var(--ink)" id="res-v2">—</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:0.2rem">Ratio r₂/r₁</div>
+          <div style="font-family:var(--mono);font-size:1rem;color:var(--ink)" id="res-ratio">—</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span>G = 6.674 × 10⁻¹¹ N·m²·kg⁻²</span>
+  <span id="footer-M">M☉ = 1.989 × 10³⁰ kg</span>
+</footer>
+
+<script>
+const G = 6.674e-11;
+
+const BODIES = {
+  sol:     { M: 1.989e30, name: 'Sol',     symbol: '☀️' },
+  tierra:  { M: 5.972e24, name: 'Tierra',  symbol: '🌍' },
+  jupiter: { M: 1.898e27, name: 'Júpiter', symbol: '🪐' },
+  marte:   { M: 6.390e23, name: 'Marte',   symbol: '🔴' },
+};
+
+let currentBody = 'sol';
+
+function setBody(key, btn) {
+  currentBody = key;
+  document.querySelectorAll('.body-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const b = BODIES[key];
+  document.getElementById('footer-M').textContent = `M(${b.name}) = ${b.M.toExponential(3)} kg`;
+}
+
+function getUnitVal(selectId) {
+  return parseFloat(document.getElementById(selectId).value);
+}
+
+function formatVel(v) {
+  if(v >= 1000) return (v/1000).toFixed(3) + ' km/s';
+  return v.toFixed(1) + ' m/s';
+}
+
+function formatTime(t_s) {
+  const days = t_s / 86400;
+  if(days < 1) return (t_s/3600).toFixed(2) + ' horas';
+  if(days < 365) return days.toFixed(1) + ' días';
+  return (days/365.25).toFixed(2) + ' años';
+}
+
+function calcular() {
+  const errEl = document.getElementById('error');
+  const resEl = document.getElementById('result');
+  errEl.classList.remove('visible');
+  resEl.classList.remove('visible');
+
+  const r1v = parseFloat(document.getElementById('r1').value);
+  const r2v = parseFloat(document.getElementById('r2').value);
+
+  if(isNaN(r1v) || isNaN(r2v)) {
+    errEl.textContent = 'Introduce valores numéricos en ambos campos.';
+    errEl.classList.add('visible'); return;
+  }
+  if(r1v <= 0 || r2v <= 0) {
+    errEl.textContent = 'Los radios deben ser positivos y no nulos.';
+    errEl.classList.add('visible'); return;
+  }
+
+  const r1 = r1v * getUnitVal('r1-unit');
+  const r2 = r2v * getUnitVal('r2-unit');
+
+  if(Math.abs(r1 - r2) / Math.max(r1,r2) < 1e-6) {
+    errEl.textContent = 'Las dos órbitas son idénticas — no hay transferencia.';
+    errEl.classList.add('visible'); return;
+  }
+
+  const M = BODIES[currentBody].M;
+  const mu = G * M;
+
+  const v1 = Math.sqrt(mu / r1);
+  const v2 = Math.sqrt(mu / r2);
+  const a  = (r1 + r2) / 2;
+  const vp = Math.sqrt(mu * (2/r1 - 1/a));
+  const va = Math.sqrt(mu * (2/r2 - 1/a));
+
+  const dv1 = Math.abs(vp - v1);
+  const dv2 = Math.abs(v2 - va);
+  const dvt = dv1 + dv2;
+  const t   = Math.PI * Math.sqrt(a**3 / mu);
+
+  document.getElementById('res-dv1').innerHTML = formatVel(dv1) + '';
+  document.getElementById('res-dv2').innerHTML = formatVel(dv2) + '';
+  document.getElementById('res-dvt').innerHTML = formatVel(dvt) + '';
+  document.getElementById('res-t').innerHTML   = formatTime(t);
+  document.getElementById('res-t-note').textContent = 'Semiórbita de transferencia';
+  document.getElementById('res-v1').textContent = formatVel(v1);
+  document.getElementById('res-v2').textContent = formatVel(v2);
+  document.getElementById('res-ratio').textContent = (r2/r1).toFixed(3);
+
+  drawDiagram(r1, r2);
+  resEl.classList.add('visible');
+}
+
+function drawDiagram(r1, r2) {
+  const svg = document.getElementById('orbit-svg');
+  const cx = 160, cy = 160, maxR = 130;
+  const rMin = Math.min(r1,r2), rMax = Math.max(r1,r2);
+  const scale = maxR / rMax;
+  const R1 = rMin * scale, R2 = rMax * scale;
+  const Ra = (R1 + R2) / 2;
+  const outward = r2 > r1;
+
+  svg.innerHTML = `
+    <!-- Fondo -->
+    <rect width="320" height="320" fill="#faf8f4"/>
+    <!-- Órbita 1 -->
+    <circle cx="${cx}" cy="${cy}" r="${R1}" fill="none" stroke="#c8c0b4" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Órbita 2 -->
+    <circle cx="${cx}" cy="${cy}" r="${R2}" fill="none" stroke="#c8c0b4" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Elipse de transferencia (semieje mayor horizontal) -->
+    <ellipse cx="${cx + (R2-R1)/2}" cy="${cy}" rx="${Ra}" ry="${Math.sqrt(R1*R2)}" fill="none" stroke="#8b2e00" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+    <!-- Cuerpo central -->
+    <circle cx="${cx}" cy="${cy}" r="7" fill="#f0a000" opacity="0.9"/>
+    <!-- Punto de partida -->
+    <circle cx="${cx + (outward?R1:R2)}" cy="${cy}" r="5" fill="#3ecb8d"/>
+    <text x="${cx + (outward?R1:R2) + 8}" y="${cy+4}" font-family="JetBrains Mono" font-size="10" fill="#3ecb8d">r₁</text>
+    <!-- Punto de llegada -->
+    <circle cx="${cx - (outward?R2:R1)}" cy="${cy}" r="5" fill="#7eb8d4"/>
+    <text x="${cx - (outward?R2:R1) - 20}" y="${cy+4}" font-family="JetBrains Mono" font-size="10" fill="#7eb8d4">r₂</text>
+    <!-- Flecha Δv1 -->
+    <line x1="${cx + (outward?R1:R2)}" y1="${cy}" x2="${cx + (outward?R1:R2)}" y2="${cy - 18}" stroke="#3ecb8d" stroke-width="1.5" marker-end="url(#arr1)"/>
+    <!-- Flecha Δv2 -->
+    <line x1="${cx - (outward?R2:R1)}" y1="${cy}" x2="${cx - (outward?R2:R1)}" y2="${cy + 18}" stroke="#7eb8d4" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <defs>
+      <marker id="arr1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#3ecb8d"/>
+      </marker>
+      <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#7eb8d4"/>
+      </marker>
+    </defs>
+    <!-- Leyenda -->
+    <circle cx="20" cy="300" r="4" fill="#3ecb8d"/>
+    <text x="28" y="304" font-family="JetBrains Mono" font-size="9" fill="#555">Δv₁ salida</text>
+    <circle cx="110" cy="300" r="4" fill="#7eb8d4"/>
+    <text x="118" y="304" font-family="JetBrains Mono" font-size="9" fill="#555">Δv₂ llegada</text>
+    <line x1="200" y1="300" x2="216" y2="300" stroke="#8b2e00" stroke-width="2" stroke-dasharray="4,2"/>
+    <text x="220" y="304" font-family="JetBrains Mono" font-size="9" fill="#8b2e00">transferencia</text>
+  `;
+}
+
+function cargarEjemplo(r1val, r2val, body, unit) {
+  const unitMap = { 'UA':'1.496e11', 'km':'1e3', 'Mm':'1e6' };
+  const u = unit ? (unitMap[unit] || '1.496e11') : '1.496e11';
+  document.getElementById('r1').value = r1val;
+  document.getElementById('r2').value = r2val;
+  document.getElementById('r1-unit').value = u;
+  document.getElementById('r2-unit').value = u;
+  // Activar el cuerpo correcto
+  const bodyKey = body || 'sol';
+  const btn = [...document.querySelectorAll('.body-btn')].find(b => b.getAttribute('onclick').includes(`'${bodyKey}'`));
+  if(btn) setBody(bodyKey, btn);
+  calcular();
+}
+
+function resetear() {
+  document.getElementById('r1').value = '';
+  document.getElementById('r2').value = '';
+  document.getElementById('result').classList.remove('visible');
+  document.getElementById('error').classList.remove('visible');
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Enter') calcular(); });
+</script>
+</body>
+</html>
