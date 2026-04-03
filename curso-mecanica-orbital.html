@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso de Mecánica Orbital — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1395XCX0L');
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf8f4;--bg2:#f2ede4;--bg3:#e8e0d4;
+  --ink:#1a1a1a;--ink2:#444;--muted:#888;
+  --rule:#d0c8be;--accent:#8b2e00;--accent2:#c44a00;
+  --serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.65;min-height:100vh}
+
+/* NAV */
+nav{position:relative;background:rgba(250,248,244,.95);border-bottom:1px solid var(--rule);padding:0 2rem;height:54px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.nav-logo .f{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--accent);color:#fff;font-style:italic;font-family:var(--serif);border-radius:3px;font-size:.9rem}
+.nav-back{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--accent)}
+
+/* HERO */
+.hero{background:var(--ink);color:#fff;padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(139,46,0,.5) 0%,transparent 65%);pointer-events:none}
+.hero-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:.8rem;position:relative}
+.hero h1{font-size:clamp(2rem,6vw,3.5rem);font-weight:500;font-style:italic;line-height:1.1;margin-bottom:.8rem;position:relative}
+.hero h1 em{color:var(--accent2);font-style:normal}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.6);font-style:italic;max-width:500px;margin:0 auto;position:relative}
+
+/* STATS */
+.stats-bar{background:var(--bg2);border-bottom:1px solid var(--rule);padding:.9rem 2rem;display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;align-items:center}
+.stat-num{font-family:var(--mono);font-size:1.1rem;color:var(--accent);font-weight:500}
+.stat-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* LAYOUT */
+.main-layout{max-width:1000px;margin:0 auto;padding:2rem 1.2rem 5rem;display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:start}
+@media(max-width:700px){.main-layout{grid-template-columns:1fr}}
+
+/* SIDEBAR */
+.sidebar{}
+.sidebar-title{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
+.topic-list{display:flex;flex-direction:column;gap:.3rem;margin-bottom:1.5rem}
+.topic-btn{font-family:var(--serif);font-size:.9rem;color:var(--ink2);background:transparent;border:none;border-left:2px solid transparent;padding:.4rem .7rem;cursor:pointer;text-align:left;transition:all .2s;border-radius:0 4px 4px 0}
+.topic-btn:hover{border-left-color:var(--rule);background:var(--bg2);color:var(--ink)}
+.topic-btn.active{border-left-color:var(--accent);color:var(--accent);background:var(--bg2);font-weight:500}
+.topic-count{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-left:.4rem}
+
+/* CONTENT */
+.content-area{}
+
+/* Active topic header */
+.topic-header{margin-bottom:1.5rem}
+.topic-header h2{font-size:1.6rem;font-weight:500;font-style:italic;margin-bottom:.3rem}
+.topic-header p{font-size:.9rem;color:var(--ink2);font-style:italic}
+
+/* VIDEO CARD */
+.video-card{border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:1.5rem;background:var(--bg)}
+.video-card.active-video{border-color:var(--accent)}
+
+.video-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:.8rem;cursor:pointer;transition:background .2s}
+.video-header:hover{background:var(--bg2)}
+.video-num{font-family:var(--mono);font-size:.68rem;color:var(--muted);width:28px;flex-shrink:0}
+.video-info{flex:1}
+.video-title{font-size:1rem;font-weight:500;margin-bottom:.15rem}
+.video-meta{font-family:var(--mono);font-size:.65rem;color:var(--muted);display:flex;gap:.8rem}
+.video-status{font-family:var(--mono);font-size:.65rem;color:var(--muted);white-space:nowrap}
+.video-status.disponible{color:var(--accent)}
+.video-status.pronto{color:var(--muted)}
+
+/* VIDEO PLAYER */
+.video-player{display:none;border-top:1px solid var(--rule)}
+.video-player.open{display:block}
+
+.video-embed{position:relative;width:100%;padding-top:56.25%;background:#000}
+.video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-coming{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,.5);font-style:italic;gap:.5rem}
+.video-coming span{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25)}
+
+.video-desc{padding:1rem 1.1rem;border-top:1px solid var(--rule);font-size:.9rem;color:var(--ink2);font-style:italic;line-height:1.5}
+
+/* ADSENSE SLOT */
+.ad-slot{background:var(--bg2);border:1px solid var(--rule);border-radius:8px;padding:1rem;text-align:center;margin-bottom:1.5rem;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ad-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+
+/* PROGRESS */
+.progress-card{background:var(--bg2);border:1px solid var(--rule);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.5rem}
+.progress-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.progress-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:.4rem}
+.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease}
+.progress-text{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html"><span class="f">f</span> Con F de Física</a>
+  <a class="nav-back" href="index.html">← Volver</a>
+</nav>
+
+<div class="hero">
+  <p class="hero-tag">Curso completo</p>
+  <h1>Mecánica de las <em>Órbitas Naturales</em></h1>
+  <p class="hero-sub">De las leyes de Kepler a la dinámica mareal del sistema Tierra-Luna</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num" id="total-lecciones">12</span><span class="stat-label">Lecciones</span></div>
+  <div class="stat"><span class="stat-num">4</span><span class="stat-label">Temas</span></div>
+  <div class="stat"><span class="stat-num">Gratis</span><span class="stat-label">Acceso</span></div>
+</div>
+
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Temas del curso</div>
+    <div class="topic-list" id="topic-list"></div>
+
+    <div class="progress-card">
+      <div class="progress-title">Tu progreso</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text">0 de 12 lecciones</div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+    <div class="topic-header">
+      <h2 id="topic-title">Fundamentos</h2>
+      <p id="topic-desc">Las bases matemáticas y físicas de la mecánica orbital clásica</p>
+    </div>
+
+    <!-- Botón Classroom -->
+    <a href="https://share.google/vfQSWoiR2gKCshWYS" target="_blank" style="display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--bg);text-decoration:none;padding:.7rem 1.4rem;border-radius:4px;margin-bottom:.5rem;transition:background .2s" onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--ink)'">
+      🎓 Acceder al aula · Google Classroom
+    </a>
+    <div style="font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-bottom:1.5rem;">
+      Código de clase: <strong style="color:var(--ink);letter-spacing:.15em;">tztlmwcy</strong> · Introdúcelo en classroom.google.com
+    </div>
+
+    <div id="video-list"></div>
+  </div>
+
+</div>
+
+<script>
+// ── DATOS DEL CURSO ──
+// Cuando tengas vídeos, sustituye el youtubeId por el ID real de YouTube
+// (la parte después de ?v= en la URL del vídeo)
+const TEMAS = [
+  {
+    id: 0,
+    titulo: "Fundamentos",
+    desc: "Las bases matemáticas y físicas de la mecánica orbital clásica",
+    lecciones: [
+      { num:1, titulo:"Introducción a la mecánica orbital", dur:"—", desc:"Presentación del curso y conceptos previos necesarios.", youtubeId:"B41557yQeCI", prueba:false },
+      { num:2, titulo:"Las leyes de Kepler", dur:"—", desc:"Derivación y significado físico de las tres leyes del movimiento planetario.", youtubeId:null },
+      { num:3, titulo:"La ley de gravitación universal", dur:"—", desc:"Newton y la fuerza gravitatoria. Relación con las leyes de Kepler.", youtubeId:null },
+    ]
+  },
+  {
+    id: 1,
+    titulo: "Elementos orbitales",
+    desc: "Cómo describir completamente una órbita en el espacio",
+    lecciones: [
+      { num:4, titulo:"Parámetros de una órbita", dur:"—", desc:"Semieje mayor, excentricidad, inclinación y los seis elementos orbitales clásicos.", youtubeId:null },
+      { num:5, titulo:"Tipos de órbitas", dur:"—", desc:"Órbitas circulares, elípticas, parabólicas e hiperbólicas.", youtubeId:null },
+      { num:6, titulo:"Velocidad orbital y período", dur:"—", desc:"Relación entre velocidad, radio y período para órbitas circulares y elípticas.", youtubeId:null },
+    ]
+  },
+  {
+    id: 2,
+    titulo: "Transferencias orbitales",
+    desc: "Cómo mover un objeto de una órbita a otra",
+    lecciones: [
+      { num:7, titulo:"Transferencia de Hohmann", dur:"—", desc:"La maniobra más eficiente para cambiar entre órbitas circulares coplanares.", youtubeId:null },
+      { num:8, titulo:"Maniobras de cambio de plano", dur:"—", desc:"Cómo cambiar la inclinación de una órbita y su coste energético.", youtubeId:null },
+      { num:9, titulo:"Asistencia gravitatoria", dur:"—", desc:"El efecto Honda o slingshot: cómo los planetas aceleran sondas espaciales.", youtubeId:null },
+    ]
+  },
+  {
+    id: 3,
+    titulo: "Dinámica mareal",
+    desc: "La evolución a largo plazo de las órbitas bajo fuerzas de marea",
+    lecciones: [
+      { num:10, titulo:"Fuerzas de marea", dur:"—", desc:"Origen y efectos de las fuerzas de marea en sistemas binarios.", youtubeId:null },
+      { num:11, titulo:"Evolución del sistema Tierra-Luna", dur:"—", desc:"Cómo la disipación mareal aleja la Luna y alarga el día terrestre.", youtubeId:null },
+      { num:12, titulo:"El Snap Point", dur:"—", desc:"El concepto original del libro: el momento futuro en que la excentricidad lunar se anula.", youtubeId:null },
+    ]
+  },
+];
+
+let temaActivo = 0;
+let vistados = new Set();
+let videoAbierto = null;
+
+function renderSidebar(){
+  const list = document.getElementById('topic-list');
+  list.innerHTML = '';
+  TEMAS.forEach((t,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'topic-btn' + (i===temaActivo?' active':'');
+    btn.innerHTML = t.titulo + `<span class="topic-count">${t.lecciones.length}</span>`;
+    btn.onclick = () => setTema(i);
+    list.appendChild(btn);
+  });
+}
+
+function renderVideos(){
+  const tema = TEMAS[temaActivo];
+  document.getElementById('topic-title').textContent = tema.titulo;
+  document.getElementById('topic-desc').textContent = tema.desc;
+  const list = document.getElementById('video-list');
+  list.innerHTML = '';
+  tema.lecciones.forEach((l,i) => {
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    card.id = `vc-${l.num}`;
+    const disponible = l.youtubeId !== null && l.youtubeId !== undefined && l.youtubeId !== '';
+    card.innerHTML = `
+      <div class="video-header" onclick="toggleVideo(${l.num}, ${disponible ? 'true' : 'false'})">
+        <span class="video-num">${String(l.num).padStart(2,'0')}</span>
+        <div class="video-info">
+          <div class="video-title">${l.titulo}</div>
+          <div class="video-meta">
+            <span>${l.dur}</span>
+          </div>
+        </div>
+        <span class="video-status ${disponible?'disponible':'pronto'}">${disponible?'▶ Ver':'Próximamente'}</span>
+      </div>
+      <div class="video-player" id="vp-${l.num}">
+        <div class="video-embed">
+          ${disponible
+            ? `${l.prueba ? '<div style="background:#8b2e00;color:#fff;font-family:JetBrains Mono,monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1rem;text-align:center;">⚠ Vídeo de prueba</div>' : ''}
+               <iframe src="https://drive.google.com/file/d/1C4Oag3ofDcJTnOweTYeCXaQ2Olu5KUpC/preview" allowfullscreen loading="lazy"></iframe>`
+            : `<div class="video-coming"><span>Próximamente</span><em>Este vídeo aún no está disponible</em></div>`
+          }
+        </div>
+        <div class="video-desc">${l.desc}</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function toggleVideo(num, disponible){
+  const player = document.getElementById(`vp-${num}`);
+  const card   = document.getElementById(`vc-${num}`);
+  if(videoAbierto === num){
+    player.classList.remove('open');
+    card.classList.remove('active-video');
+    videoAbierto = null;
+  } else {
+    if(videoAbierto !== null){
+      document.getElementById(`vp-${videoAbierto}`)?.classList.remove('open');
+      document.getElementById(`vc-${videoAbierto}`)?.classList.remove('active-video');
+    }
+    player.classList.add('open');
+    card.classList.add('active-video');
+    videoAbierto = num;
+    if(disponible) vistados.add(num);
+    updateProgress();
+    card.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+
+function setTema(idx){
+  temaActivo = idx;
+  videoAbierto = null;
+  renderSidebar();
+  renderVideos();
+}
+
+function updateProgress(){
+  const total = TEMAS.reduce((s,t)=>s+t.lecciones.length,0);
+  const pct = Math.round(vistados.size/total*100);
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-text').textContent = `${vistados.size} de ${total} lecciones`;
+}
+
+// Init
+renderSidebar();
+renderVideos();
+updateProgress();
+</script>
+</body>
+</html>
