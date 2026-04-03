@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Qué órbita es esta? — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1395XCX0L');
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#17171e;--bg3:#1e1e28;
+  --border:rgba(255,255,255,0.08);--text:#f0f0f0;--muted:#888;
+  --accent:#f0c040;--correct:#3ecf8e;--wrong:#f05a5a;
+  --bebas:'Bebas Neue',sans-serif;--sans:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 4rem}
+header{width:100%;background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#8b2e00}
+.back{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.hero{text-align:center;padding:2.5rem 2rem 1.5rem;max-width:700px;width:100%}
+.hero h1{font-family:var(--bebas);font-size:clamp(2.5rem,9vw,5rem);letter-spacing:.05em;color:var(--accent);margin-bottom:.4rem}
+.hero p{color:var(--muted);font-size:.95rem;font-style:italic}
+.score-bar{display:flex;gap:1.5rem;align-items:center;justify-content:center;margin:.5rem 0 1.5rem;font-family:var(--mono);font-size:.85rem}
+.score-item{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.score-val{font-size:1.5rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.score-sep{width:1px;height:36px;background:var(--border)}
+.game-card{width:100%;max-width:680px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:0 1rem}
+.progress-wrap{padding:.8rem 1.5rem .2rem;display:flex;align-items:center;gap:.8rem}
+.progress-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+.progress-text{font-family:var(--mono);font-size:.7rem;color:var(--muted);white-space:nowrap}
+
+/* Parámetros */
+.params-area{padding:1.5rem 1.5rem 1rem}
+.params-tag{font-family:var(--mono);font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;text-align:center}
+.params-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.param-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem}
+.param-name{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.param-value{font-family:var(--mono);font-size:1.1rem;color:var(--text);font-weight:500}
+.param-unit{font-size:.75rem;color:var(--muted);margin-left:.2em}
+
+/* Fase 1: tipo de órbita */
+.fase-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;padding:0 1.5rem}
+.tipo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;padding:0 1.5rem 1.2rem}
+.opt-btn{background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;padding:.75rem 1rem;color:var(--text);font-family:var(--sans);font-size:.95rem;font-weight:500;cursor:pointer;transition:border-color .15s,background .15s;text-align:left;display:flex;align-items:center;gap:.6rem}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(240,192,64,.07)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct{border-color:var(--correct);background:rgba(62,207,142,.12);color:var(--correct)}
+.opt-btn.wrong{border-color:var(--wrong);background:rgba(240,90,90,.1);color:var(--wrong);opacity:.7}
+.opt-emoji{font-size:1.1rem}
+
+/* Fase 2: objeto */
+.objeto-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;padding:0 1.5rem 1.2rem}
+
+/* Feedback */
+.feedback{padding:1rem 1.5rem;border-top:1px solid var(--border);display:none;animation:popIn .3s ease}
+.feedback.visible{display:block}
+@keyframes popIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fb-result{font-family:var(--bebas);font-size:1.6rem;letter-spacing:.05em;margin-bottom:.3rem}
+.fb-result.ok{color:var(--correct)}
+.fb-result.bad{color:var(--wrong)}
+.fb-explain{font-size:.88rem;color:var(--muted);line-height:1.5;margin-bottom:1rem}
+.btn-next{font-family:var(--bebas);font-size:1.1rem;letter-spacing:.1em;background:var(--accent);color:#111;border:none;border-radius:6px;padding:.6rem 1.8rem;cursor:pointer;transition:opacity .2s}
+.btn-next:hover{opacity:.85}
+
+/* End */
+.end-screen{display:none;text-align:center;padding:3rem 2rem;max-width:500px;width:100%}
+.end-screen.visible{display:block;animation:popIn .4s ease}
+.end-trophy{font-size:4rem;margin-bottom:1rem}
+.end-title{font-family:var(--bebas);font-size:3rem;letter-spacing:.05em;color:var(--accent);margin-bottom:.5rem}
+.end-score{font-size:1.1rem;color:var(--muted);margin-bottom:2rem}
+.end-score strong{color:var(--text);font-size:1.4rem}
+.btn-restart{font-family:var(--bebas);font-size:1.2rem;letter-spacing:.1em;background:var(--accent);color:#111;border:none;border-radius:8px;padding:.8rem 2.5rem;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">Con F de Física</span>
+  <a href="index.html" class="back">← Volver</a>
+</header>
+
+<div class="hero">
+  <h1>¿Qué órbita es esta?</h1>
+  <p>Analiza los parámetros numéricos e identifica el tipo de órbita y el objeto</p>
+</div>
+
+<div class="score-bar">
+  <div class="score-item"><span class="score-val" id="sc-correct">0</span><span class="score-label">Correctas</span></div>
+  <div class="score-sep"></div>
+  <div class="score-item"><span class="score-val" id="sc-total">0</span><span class="score-label">Jugadas</span></div>
+  <div class="score-sep"></div>
+  <div class="score-item"><span class="score-val" id="sc-pct">—</span><span class="score-label">Acierto</span></div>
+</div>
+
+<div class="game-card" id="game-card">
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="progress-text" id="progress-text">1 / 10</span>
+  </div>
+  <div class="params-area">
+    <div class="params-tag">Parámetros de la órbita</div>
+    <div class="params-grid" id="params-grid"></div>
+  </div>
+  <div class="fase-label" id="fase-label">Fase 1 — ¿Qué tipo de órbita es?</div>
+  <div id="options-area"></div>
+  <div class="feedback" id="feedback">
+    <div class="fb-result" id="fb-result"></div>
+    <div class="fb-explain" id="fb-explain"></div>
+    <button class="btn-next" id="btn-next">Siguiente →</button>
+  </div>
+</div>
+
+<div class="end-screen" id="end-screen">
+  <div class="end-trophy" id="end-trophy">🏆</div>
+  <div class="end-title" id="end-title">¡Bien jugado!</div>
+  <div class="end-score" id="end-score"></div>
+  <button class="btn-restart" onclick="restartGame()">Jugar de nuevo</button>
+</div>
+
+<script>
+// ── ÓRBITAS ──
+const ORBITAS = [
+  {
+    nombre: "Órbita de la Luna",
+    tipo: "Elíptica",
+    tipoEmoji: "🥚",
+    params: [{n:"Semieje mayor",v:"384 400",u:"km"},{n:"Excentricidad",v:"0.0549",u:""},{n:"Período",v:"27.32",u:"días"},{n:"Inclinación",v:"5.14",u:"°"}],
+    explain: "La Luna orbita la Tierra en una elipse de baja excentricidad (e=0.055). Su semieje de ~384 400 km y período de 27.32 días son los más conocidos de la astronomía."
+  },
+  {
+    nombre: "Órbita de Marte",
+    tipo: "Elíptica",
+    tipoEmoji: "🥚",
+    params: [{n:"Semieje mayor",v:"1.524",u:"UA"},{n:"Excentricidad",v:"0.0935",u:""},{n:"Período",v:"686.97",u:"días"},{n:"Inclinación",v:"1.85",u:"°"}],
+    explain: "Marte tiene una órbita elíptica más excéntrica que la Tierra (e=0.094). Su período de casi 2 años terrestres y su semieje de 1.52 UA son clave."
+  },
+  {
+    nombre: "ISS (Estación Espacial)",
+    tipo: "Casi circular",
+    tipoEmoji: "⭕",
+    params: [{n:"Altitud",v:"408",u:"km"},{n:"Excentricidad",v:"0.0003",u:""},{n:"Período",v:"92.68",u:"min"},{n:"Inclinación",v:"51.6",u:"°"}],
+    explain: "La ISS está en una órbita baja terrestre (LEO) casi perfectamente circular (e≈0.0003). Da 15-16 vueltas al día a ~7.66 km/s."
+  },
+  {
+    nombre: "Cometa Halley",
+    tipo: "Elíptica muy excéntrica",
+    tipoEmoji: "🌠",
+    params: [{n:"Semieje mayor",v:"17.8",u:"UA"},{n:"Excentricidad",v:"0.967",u:""},{n:"Período",v:"75.3",u:"años"},{n:"Perihelio",v:"0.586",u:"UA"}],
+    explain: "El cometa Halley tiene una de las órbitas más excéntricas del sistema solar (e=0.967). Se acerca al Sol cada ~75 años y alcanza el cinturón de Kuiper."
+  },
+  {
+    nombre: "Órbita GEO",
+    tipo: "Casi circular",
+    tipoEmoji: "⭕",
+    params: [{n:"Radio orbital",v:"42 164",u:"km"},{n:"Excentricidad",v:"< 0.001",u:""},{n:"Período",v:"23h 56min",u:""},{n:"Inclinación",v:"0",u:"°"}],
+    explain: "La órbita geoestacionaria (GEO) es casi circular a 42 164 km. Los satélites aquí tienen período igual al de rotación terrestre y parecen fijos en el cielo."
+  },
+  {
+    nombre: "Mercurio",
+    tipo: "Elíptica",
+    tipoEmoji: "🥚",
+    params: [{n:"Semieje mayor",v:"0.387",u:"UA"},{n:"Excentricidad",v:"0.2056",u:""},{n:"Período",v:"87.97",u:"días"},{n:"Inclinación",v:"7.00",u:"°"}],
+    explain: "Mercurio tiene la órbita más excéntrica de los planetas del sistema solar (e=0.206). Su cercanía al Sol hace que la relatividad general sea apreciable."
+  },
+  {
+    nombre: "Voyager 1",
+    tipo: "Hiperbólica",
+    tipoEmoji: "↗️",
+    params: [{n:"Velocidad actual",v:"17.0",u:"km/s"},{n:"Excentricidad",v:"> 1",u:""},{n:"Distancia al Sol",v:"~163",u:"UA"},{n:"Trayectoria",v:"Escape",u:""}],
+    explain: "La Voyager 1 tiene energía suficiente para escapar del sistema solar (e>1, órbita hiperbólica). Es el objeto humano más lejano, a más de 163 UA del Sol."
+  },
+  {
+    nombre: "Plutón",
+    tipo: "Elíptica muy excéntrica",
+    tipoEmoji: "🌠",
+    params: [{n:"Semieje mayor",v:"39.48",u:"UA"},{n:"Excentricidad",v:"0.2488",u:""},{n:"Período",v:"247.9",u:"años"},{n:"Inclinación",v:"17.1",u:"°"}],
+    explain: "Plutón tiene una órbita muy excéntrica e inclinada. En su perihelio se acerca más al Sol que Neptuno. Su período de 248 años y su alta inclinación lo distinguen."
+  },
+  {
+    nombre: "Órbita de Júpiter",
+    tipo: "Casi circular",
+    tipoEmoji: "⭕",
+    params: [{n:"Semieje mayor",v:"5.203",u:"UA"},{n:"Excentricidad",v:"0.0489",u:""},{n:"Período",v:"11.86",u:"años"},{n:"Inclinación",v:"1.30",u:"°"}],
+    explain: "Júpiter tiene una órbita casi circular (e=0.049) a 5.2 UA. Su período de ~12 años y su dominio gravitacional del sistema solar lo hacen inconfundible."
+  },
+  {
+    nombre: "Sonda New Horizons",
+    tipo: "Hiperbólica",
+    tipoEmoji: "↗️",
+    params: [{n:"Velocidad escape",v:"14.0",u:"km/s"},{n:"Excentricidad",v:"> 1",u:""},{n:"Distancia al Sol",v:"~57",u:"UA"},{n:"Lanzamiento",v:"2006",u:""}],
+    explain: "New Horizons fue lanzada con suficiente energía para escapar del sistema solar (e>1). Sobrevoló Plutón en 2015 y continúa hacia el espacio interestelar."
+  },
+  {
+    nombre: "Órbita de Venus",
+    tipo: "Casi circular",
+    tipoEmoji: "⭕",
+    params: [{n:"Semieje mayor",v:"0.723",u:"UA"},{n:"Excentricidad",v:"0.0067",u:""},{n:"Período",v:"224.7",u:"días"},{n:"Inclinación",v:"3.39",u:"°"}],
+    explain: "Venus tiene la órbita más circular de todos los planetas (e=0.007). Su período de 225 días y su proximidad al Sol la hacen el planeta más brillante del cielo."
+  },
+  {
+    nombre: "Io (luna de Júpiter)",
+    tipo: "Casi circular",
+    tipoEmoji: "⭕",
+    params: [{n:"Semieje mayor",v:"421 700",u:"km"},{n:"Excentricidad",v:"0.0041",u:""},{n:"Período",v:"1.769",u:"días"},{n:"Velocidad orbital",v:"17.33",u:"km/s"}],
+    explain: "Io orbita Júpiter en una órbita casi circular muy rápida. La pequeña excentricidad (e=0.004) genera fuerzas de marea enormes que hacen de Io el cuerpo más volcánico del sistema solar."
+  },
+];
+
+const TIPOS = [
+  {nombre:"Casi circular", emoji:"⭕"},
+  {nombre:"Elíptica", emoji:"🥚"},
+  {nombre:"Elíptica muy excéntrica", emoji:"🌠"},
+  {nombre:"Hiperbólica", emoji:"↗️"},
+];
+
+const ROUNDS = 10;
+let queue=[], round=0, score=0, fase=1, tipoElegido='';
+
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function buildQueue(){ return shuffle(ORBITAS).slice(0,ROUNDS); }
+
+function renderRound(){
+  fase=1; tipoElegido='';
+  const o=queue[round];
+  document.getElementById('progress-fill').style.width=`${(round/ROUNDS)*100}%`;
+  document.getElementById('progress-text').textContent=`${round+1} / ${ROUNDS}`;
+  document.getElementById('feedback').classList.remove('visible');
+
+  // Parámetros
+  const pg=document.getElementById('params-grid');
+  pg.innerHTML='';
+  o.params.forEach(p=>{
+    pg.innerHTML+=`<div class="param-card"><div class="param-name">${p.n}</div><div class="param-value">${p.v}<span class="param-unit">${p.u}</span></div></div>`;
+  });
+
+  // Fase 1: tipo
+  document.getElementById('fase-label').textContent='Fase 1 — ¿Qué tipo de órbita es?';
+  renderTipos();
+}
+
+function renderTipos(){
+  const o=queue[round];
+  const area=document.getElementById('options-area');
+  area.innerHTML='<div class="tipo-grid" id="tipo-grid"></div>';
+  const grid=document.getElementById('tipo-grid');
+  shuffle(TIPOS).forEach(t=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-emoji">${t.emoji}</span>${t.nombre}`;
+    btn.onclick=()=>handleTipo(t.nombre, o);
+    grid.appendChild(btn);
+  });
+}
+
+function handleTipo(elegido, o){
+  tipoElegido=elegido;
+  const correcto=elegido===o.tipo;
+  document.querySelectorAll('#tipo-grid .opt-btn').forEach(btn=>{
+    btn.disabled=true;
+    const name=btn.textContent.trim().replace(/^.\s/,'');
+    if(name===o.tipo) btn.classList.add('correct');
+    else if(name===elegido&&!correcto) btn.classList.add('wrong');
+  });
+
+  if(correcto){
+    // Pasa a fase 2
+    setTimeout(()=>renderObjetos(o), 600);
+  } else {
+    // Fallo en tipo — mostrar feedback directo
+    showFeedback(false, o, false);
+  }
+}
+
+function renderObjetos(o){
+  document.getElementById('fase-label').textContent='Fase 2 — ¿Qué objeto es?';
+  // 4 opciones: el correcto + 3 aleatorios del mismo tipo o distintos
+  const otros=shuffle(ORBITAS.filter(x=>x.nombre!==o.nombre)).slice(0,3);
+  const opciones=shuffle([o,...otros]);
+  const area=document.getElementById('options-area');
+  area.innerHTML='<div class="objeto-grid" id="objeto-grid"></div>';
+  const grid=document.getElementById('objeto-grid');
+  opciones.forEach(op=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-emoji">🔭</span>${op.nombre}`;
+    btn.onclick=()=>handleObjeto(op.nombre, o);
+    grid.appendChild(btn);
+  });
+}
+
+function handleObjeto(elegido, o){
+  const correcto=elegido===o.nombre;
+  document.querySelectorAll('#objeto-grid .opt-btn').forEach(btn=>{
+    btn.disabled=true;
+    const name=btn.textContent.trim().replace(/^.\s/,'');
+    if(name===o.nombre) btn.classList.add('correct');
+    else if(name===elegido&&!correcto) btn.classList.add('wrong');
+  });
+  showFeedback(correcto, o, true);
+}
+
+function showFeedback(correcto, o, faseDos){
+  if(correcto) score++;
+  const fb=document.getElementById('feedback');
+  document.getElementById('fb-result').textContent=correcto?'¡Correcto! 🎉':(faseDos?`Era ${o.nombre}`:`Era una ${o.tipo}`);
+  document.getElementById('fb-result').className='fb-result '+(correcto?'ok':'bad');
+  document.getElementById('fb-explain').textContent=o.explain;
+  fb.classList.add('visible');
+  updateScore();
+}
+
+document.getElementById('btn-next').onclick=()=>{
+  round++;
+  if(round>=ROUNDS) showEnd();
+  else renderRound();
+};
+
+function updateScore(){
+  const total=round+1;
+  document.getElementById('sc-correct').textContent=score;
+  document.getElementById('sc-total').textContent=total;
+  document.getElementById('sc-pct').textContent=Math.round(score/total*100)+'%';
+}
+
+function showEnd(){
+  document.getElementById('game-card').style.display='none';
+  const end=document.getElementById('end-screen');
+  end.classList.add('visible');
+  const pct=Math.round(score/ROUNDS*100);
+  let trophy='🥉',title='¡Sigue practicando!';
+  if(pct>=90){trophy='🏆';title='¡Astrónomo experto!';}
+  else if(pct>=70){trophy='🥇';title='¡Muy bien!';}
+  else if(pct>=50){trophy='🥈';title='¡Nada mal!';}
+  document.getElementById('end-trophy').textContent=trophy;
+  document.getElementById('end-title').textContent=title;
+  document.getElementById('end-score').innerHTML=`Has acertado <strong>${score} de ${ROUNDS}</strong> órbitas (${pct}%)`;
+}
+
+function restartGame(){
+  score=0;round=0;
+  document.getElementById('sc-correct').textContent='0';
+  document.getElementById('sc-total').textContent='0';
+  document.getElementById('sc-pct').textContent='—';
+  document.getElementById('game-card').style.display='block';
+  document.getElementById('end-screen').classList.remove('visible');
+  queue=buildQueue();
+  renderRound();
+}
+
+queue=buildQueue();
+renderRound();
+</script>
+</body>
+</html>
