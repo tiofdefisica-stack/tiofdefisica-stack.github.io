@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fondo circular oscuro -->
+  <circle cx="256" cy="256" r="256" fill="#080810"/>
+  <!-- Órbita exterior -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#8b2e00" stroke-width="8" opacity="0.5"/>
+  <!-- Órbita interior -->
+  <circle cx="256" cy="256" r="140" fill="none" stroke="#8b2e00" stroke-width="5" opacity="0.35"/>
+  <!-- Punto orbital (cuerpo orbitando) -->
+  <circle cx="466" cy="256" r="18" fill="#c8a84b"/>
+  <!-- Letra f cursiva central -->
+  <text x="256" y="320" 
+    font-family="Georgia, serif" 
+    font-size="240" 
+    font-style="italic" 
+    font-weight="400"
+    text-anchor="middle" 
+    fill="#e8e8f0"
+    opacity="0.92">f</text>
+</svg>
