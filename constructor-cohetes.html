@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constructor de Cohetes — Con F de Física</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());gtag('config','G-X1395XCX0L');
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--bg2:#0e0e1a;--bg3:#141425;
+  --border:rgba(255,255,255,0.08);--text:#e8e8f0;--muted:#6a6a88;
+  --accent:#c8a84b;--correct:#3ecf8e;--wrong:#e05555;
+  --serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);min-height:100vh;padding-bottom:4rem}
+
+header{border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.95)}
+.brand{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.back{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;color:var(--muted);text-decoration:none}
+
+.hero{text-align:center;padding:2rem 1.5rem 1.5rem}
+.hero-tag{font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.hero h1{font-size:clamp(1.6rem,5vw,2.6rem);font-weight:500;font-style:italic;margin-bottom:.3rem}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero-sub{font-size:.9rem;color:var(--muted);font-style:italic}
+
+.container{max-width:900px;margin:0 auto;padding:1rem 1rem}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start}
+@media(max-width:640px){.layout{grid-template-columns:1fr}}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:1rem}
+.card-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+
+/* Carga útil */
+.payload-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.payload-name{font-size:.9rem;color:var(--text)}
+.payload-mass{font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--bg3);border-radius:2px;outline:none;cursor:pointer;margin-top:.3rem}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer}
+
+/* Etapas */
+.stage-list{display:flex;flex-direction:column;gap:.7rem}
+.stage-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem;position:relative}
+.stage-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem}
+.stage-num{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stage-name{font-size:.9rem;color:var(--text);font-weight:500;flex:1}
+.stage-remove{font-family:var(--mono);font-size:.6rem;background:transparent;border:1px solid rgba(224,85,85,.3);color:#e05555;padding:.2rem .4rem;border-radius:3px;cursor:pointer}
+
+.stage-params{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.param-group{display:flex;flex-direction:column;gap:.2rem}
+.param-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.param-val{font-family:var(--mono);font-size:.85rem;color:var(--accent)}
+.param-input{font-family:var(--mono);font-size:.82rem;background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:.25rem .4rem;width:100%;outline:none}
+.param-input:focus{border-color:var(--accent)}
+
+.add-stage-btn{width:100%;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px dashed var(--border);color:var(--muted);padding:.6rem;border-radius:6px;cursor:pointer;margin-top:.5rem;transition:border-color .2s,color .2s}
+.add-stage-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Botón lanzar */
+.launch-btn{width:100%;font-family:var(--mono);font-size:.82rem;letter-spacing:.15em;text-transform:uppercase;background:var(--accent);color:#111;border:none;border-radius:6px;padding:.8rem;cursor:pointer;margin-top:.8rem;transition:opacity .2s;font-weight:700}
+.launch-btn:hover{opacity:.85}
+
+/* Resultados */
+.results-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-bottom:1rem}
+@media(max-width:400px){.results-grid{grid-template-columns:1fr}}
+.res-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem}
+.res-card.highlight{border-color:var(--accent)}
+.res-card.success{border-color:var(--correct);background:rgba(62,207,142,.06)}
+.res-card.fail{border-color:var(--wrong);background:rgba(224,85,85,.06)}
+.res-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+.res-val{font-family:var(--mono);font-size:1rem;color:var(--accent);font-weight:500}
+.res-val.success{color:var(--correct)}
+.res-val.fail{color:var(--wrong)}
+.res-unit{font-size:.68rem;color:var(--muted);margin-left:.15em}
+
+/* Veredicto */
+.verdict{border-radius:8px;padding:1rem 1.2rem;margin-bottom:1rem;text-align:center}
+.verdict.success{background:rgba(62,207,142,.08);border:1px solid rgba(62,207,142,.3)}
+.verdict.fail{background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.3)}
+.verdict-icon{font-size:2.5rem;margin-bottom:.4rem}
+.verdict-title{font-size:1.3rem;font-style:italic;margin-bottom:.3rem}
+.verdict-title.success{color:var(--correct)}
+.verdict-title.fail{color:var(--wrong)}
+.verdict-desc{font-size:.88rem;color:var(--muted);font-style:italic;line-height:1.5}
+
+/* Animación SVG */
+.anim-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+.anim-wrap svg{display:block;width:100%}
+
+/* Desglose etapas */
+.stages-breakdown{display:flex;flex-direction:column;gap:.5rem}
+.stage-row{display:flex;align-items:center;gap:.7rem;font-size:.85rem}
+.stage-color{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.stage-info{flex:1;color:var(--muted)}
+.stage-dv{font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+
+/* Presets de cohetes */
+.presets-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+.preset-btn{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:.3rem .6rem;border-radius:4px;cursor:pointer;transition:border-color .2s,color .2s}
+.preset-btn:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">Con F de Física</span>
+  <a href="index.html" class="back">← Volver</a>
+</header>
+
+<div class="hero">
+  <p class="hero-tag">Herramienta interactiva</p>
+  <h1>Constructor de <em>Cohetes</em></h1>
+  <p class="hero-sub">Diseña tu cohete por etapas y calcula si puede escapar de la Tierra</p>
+</div>
+
+<div class="container">
+<div class="layout">
+
+<!-- Panel izquierdo: configuración -->
+<div>
+  <div class="card">
+    <div class="card-title">Carga útil</div>
+    <div class="payload-row">
+      <span class="payload-name">Masa de la carga útil</span>
+      <span class="payload-mass" id="payload-val">1 000 kg</span>
+    </div>
+    <input type="range" id="payload" min="100" max="50000" step="100" value="1000" oninput="updatePayload()">
+    <div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-top:.4rem">
+      Satélite pequeño ≈ 500 kg · Cápsula tripulada ≈ 10 000 kg
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Etapas del cohete</div>
+    <div style="margin-bottom:.7rem">
+      <div class="card-title" style="margin-bottom:.4rem;border:none;padding:0">Cohetes reales</div>
+      <div class="presets-row">
+        <button class="preset-btn" onclick="loadRocket('falcon9')">🚀 Falcon 9</button>
+        <button class="preset-btn" onclick="loadRocket('saturn5')">🌕 Saturn V</button>
+        <button class="preset-btn" onclick="loadRocket('ariane5')">🇪🇺 Ariane 5</button>
+        <button class="preset-btn" onclick="loadRocket('vanguard')">📡 Vanguard</button>
+      </div>
+    </div>
+    <div class="stage-list" id="stage-list"></div>
+    <button class="add-stage-btn" onclick="addStage()">+ Añadir etapa</button>
+    <button class="launch-btn" onclick="launch()">🚀 ¡Lanzar!</button>
+  </div>
+</div>
+
+<!-- Panel derecho: resultados -->
+<div id="results-panel" style="display:none">
+  <div class="verdict" id="verdict">
+    <div class="verdict-icon" id="verdict-icon"></div>
+    <div class="verdict-title" id="verdict-title"></div>
+    <div class="verdict-desc" id="verdict-desc"></div>
+  </div>
+
+  <div class="anim-wrap">
+    <svg id="anim-svg" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+    </svg>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Resultados</div>
+    <div class="results-grid">
+      <div class="res-card highlight">
+        <div class="res-label">Δv total</div>
+        <div class="res-val" id="res-dv">—<span class="res-unit">m/s</span></div>
+      </div>
+      <div class="res-card" id="res-escape-card">
+        <div class="res-label">Δv necesario</div>
+        <div class="res-val" id="res-escape">9 400<span class="res-unit">m/s</span></div>
+      </div>
+      <div class="res-card">
+        <div class="res-label">Masa total inicial</div>
+        <div class="res-val" id="res-mass">—<span class="res-unit">t</span></div>
+      </div>
+      <div class="res-card">
+        <div class="res-label">Ratio masa/carga</div>
+        <div class="res-val" id="res-ratio">—</div>
+      </div>
+    </div>
+
+    <div class="card-title" style="margin-top:.5rem">Desglose por etapa</div>
+    <div class="stages-breakdown" id="stages-breakdown"></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+// ── Física ──
+// Ecuación de Tsiolkovsky: Δv = Isp·g₀·ln(m0/mf)
+const G0 = 9.807; // m/s²
+const DV_LEO = 9400;  // m/s para LEO
+const DV_GEO = 13000; // m/s para GEO
+const DV_ESCAPE = 11186; // m/s velocidad de escape
+
+const STAGE_COLORS = ['#c8a84b','#7eb8d4','#e05555','#4ecb8d'];
+
+// Presets cohetes reales
+const ROCKETS = {
+  falcon9: {
+    payload: 22800,
+    stages: [
+      {name:'Etapa 1 (Merlin)',  isp:282, mProp:411000, mDry:25600},
+      {name:'Etapa 2 (Merlin Vac)', isp:348, mProp:107500, mDry:4000},
+    ]
+  },
+  saturn5: {
+    payload: 45000,
+    stages: [
+      {name:'S-IC (F-1)',    isp:263, mProp:2077000, mDry:131000},
+      {name:'S-II (J-2)',    isp:421, mProp:456000,  mDry:36200},
+      {name:'S-IVB (J-2)',  isp:421, mProp:106500,  mDry:13300},
+    ]
+  },
+  ariane5: {
+    payload: 20000,
+    stages: [
+      {name:'EPC (Vulcain 2)', isp:431, mProp:170000, mDry:12200},
+      {name:'ESC-A (HM7B)',    isp:446, mProp:14900,  mDry:2100},
+    ]
+  },
+  vanguard: {
+    payload: 1.5,
+    stages: [
+      {name:'Etapa 1 (GE X-405)', isp:230, mProp:7700, mDry:640},
+      {name:'Etapa 2 (Aerojet)',  isp:260, mProp:1400, mDry:152},
+      {name:'Etapa 3 (ABL)',      isp:235, mProp:194,  mDry:21},
+    ]
+  },
+};
+
+let stages = [];
+
+function defaultStage(n) {
+  return {name:`Etapa ${n}`, isp:300, mProp:50000, mDry:5000};
+}
+
+function addStage() {
+  stages.push(defaultStage(stages.length+1));
+  renderStages();
+}
+
+function removeStage(i) {
+  stages.splice(i,1);
+  renderStages();
+}
+
+function renderStages() {
+  const list = document.getElementById('stage-list');
+  list.innerHTML = '';
+  stages.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.className = 'stage-card';
+    div.innerHTML = `
+      <div class="stage-header">
+        <div style="width:10px;height:10px;border-radius:50%;background:${STAGE_COLORS[i%4]};flex-shrink:0"></div>
+        <span class="stage-name">${s.name}</span>
+        <button class="stage-remove" onclick="removeStage(${i})">✕</button>
+      </div>
+      <div class="stage-params">
+        <div class="param-group">
+          <div class="param-label">Isp (s)</div>
+          <input class="param-input" type="number" value="${s.isp}" min="100" max="500"
+            oninput="stages[${i}].isp=+this.value">
+        </div>
+        <div class="param-group">
+          <div class="param-label">Masa propelente (kg)</div>
+          <input class="param-input" type="number" value="${s.mProp}" min="100"
+            oninput="stages[${i}].mProp=+this.value">
+        </div>
+        <div class="param-group">
+          <div class="param-label">Masa seca (kg)</div>
+          <input class="param-input" type="number" value="${s.mDry}" min="50"
+            oninput="stages[${i}].mDry=+this.value">
+        </div>
+        <div class="param-group">
+          <div class="param-label">Δv etapa</div>
+          <div class="param-val" id="dv-stage-${i}">—</div>
+        </div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  updateStageDvs();
+}
+
+function updateStageDvs() {
+  const payload = parseFloat(document.getElementById('payload').value);
+  // Calcular masa encima de cada etapa
+  let massAbove = payload;
+  // Calcular de arriba a abajo
+  for(let i = stages.length-1; i >= 0; i--) {
+    const s = stages[i];
+    const m0 = massAbove + s.mDry + s.mProp;
+    const mf = massAbove + s.mDry;
+    const dv = s.isp * G0 * Math.log(m0/mf);
+    const el = document.getElementById(`dv-stage-${i}`);
+    if(el) el.textContent = Math.round(dv) + ' m/s';
+    massAbove += s.mDry + s.mProp;
+  }
+}
+
+function updatePayload() {
+  const v = parseFloat(document.getElementById('payload').value);
+  document.getElementById('payload-val').textContent = v >= 1000
+    ? (v/1000).toFixed(1)+' t' : v+' kg';
+  updateStageDvs();
+}
+
+function loadRocket(key) {
+  const r = ROCKETS[key];
+  document.getElementById('payload').value = r.payload;
+  updatePayload();
+  stages = r.stages.map((s,i) => ({...s}));
+  renderStages();
+  document.getElementById('results-panel').style.display = 'none';
+}
+
+// ── Cálculo ──
+function launch() {
+  if(stages.length === 0) { alert('Añade al menos una etapa'); return; }
+
+  const payload = parseFloat(document.getElementById('payload').value);
+  let dvTotal = 0;
+  let massAbove = payload;
+  const stageResults = [];
+
+  for(let i = stages.length-1; i >= 0; i--) {
+    const s = stages[i];
+    const m0 = massAbove + s.mDry + s.mProp;
+    const mf = massAbove + s.mDry;
+    const dv = s.isp * G0 * Math.log(m0/mf);
+    dvTotal += dv;
+    stageResults.unshift({name:s.name, dv, color:STAGE_COLORS[i%4]});
+    massAbove += s.mDry + s.mProp;
+  }
+
+  const totalMass = massAbove; // kg
+  const ratio = totalMass / payload;
+  const success = dvTotal >= DV_LEO;
+  const reachesGEO = dvTotal >= DV_GEO;
+  const escapes = dvTotal >= DV_ESCAPE;
+
+  // Mostrar resultados
+  document.getElementById('results-panel').style.display = 'block';
+
+  // Veredicto
+  const vd = document.getElementById('verdict');
+  vd.className = 'verdict ' + (success?'success':'fail');
+  document.getElementById('verdict-icon').textContent = escapes?'🌌':reachesGEO?'🛰️':success?'🚀':'💥';
+  document.getElementById('verdict-title').className = 'verdict-title '+(success?'success':'fail');
+  document.getElementById('verdict-title').textContent = escapes
+    ? '¡Escapa del sistema solar!'
+    : reachesGEO ? '¡Alcanza órbita geoestacionaria!'
+    : success ? '¡Alcanza órbita baja (LEO)!'
+    : '⚠ Insuficiente — no llega a órbita';
+  document.getElementById('verdict-desc').textContent = escapes
+    ? `Con ${Math.round(dvTotal).toLocaleString()} m/s tu cohete supera la velocidad de escape (11 186 m/s) y puede salir del sistema solar.`
+    : reachesGEO ? `Con ${Math.round(dvTotal).toLocaleString()} m/s alcanza la órbita geoestacionaria a 35 786 km de altitud.`
+    : success ? `Con ${Math.round(dvTotal).toLocaleString()} m/s alcanza la órbita baja terrestre. Necesitarías ${Math.round(DV_GEO-dvTotal).toLocaleString()} m/s más para GEO.`
+    : `Con ${Math.round(dvTotal).toLocaleString()} m/s no es suficiente. Te faltan ${Math.round(DV_LEO-dvTotal).toLocaleString()} m/s para LEO.`;
+
+  // Métricas
+  document.getElementById('res-dv').innerHTML = Math.round(dvTotal).toLocaleString()+'<span class="res-unit">m/s</span>';
+  document.getElementById('res-mass').innerHTML = (totalMass/1000).toFixed(1)+'<span class="res-unit">t</span>';
+  document.getElementById('res-ratio').textContent = ratio.toFixed(1)+':1';
+
+  // Desglose
+  const bd = document.getElementById('stages-breakdown');
+  bd.innerHTML = '';
+  stageResults.forEach(sr => {
+    bd.innerHTML += `
+      <div class="stage-row">
+        <div class="stage-color" style="background:${sr.color}"></div>
+        <div class="stage-info">${sr.name}</div>
+        <div class="stage-dv">${Math.round(sr.dv).toLocaleString()} m/s</div>
+      </div>`;
+  });
+
+  // Animación
+  animateLaunch(success, dvTotal, DV_LEO);
+
+  // Scroll a resultados
+  document.getElementById('results-panel').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ── Animación SVG ──
+function animateLaunch(success, dv, dvNeeded) {
+  const svg = document.getElementById('anim-svg');
+  const pct = Math.min(dv / dvNeeded, 1.5);
+
+  // Fondo
+  let content = `
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#000008"/>
+        <stop offset="60%" stop-color="#0a0a20"/>
+        <stop offset="100%" stop-color="#1a3a1a"/>
+      </linearGradient>
+    </defs>
+    <rect width="300" height="200" fill="url(#sky)"/>`;
+
+  // Estrellas
+  for(let i=0;i<40;i++){
+    const sx=(i*137)%300, sy=(i*97)%120;
+    content += `<circle cx="${sx}" cy="${sy}" r="0.7" fill="white" opacity="${0.3+Math.random()*0.4}"/>`;
+  }
+
+  // Tierra
+  content += `<ellipse cx="150" cy="215" rx="200" ry="40" fill="#1a3a1a" opacity="0.8"/>`;
+  content += `<ellipse cx="150" cy="212" rx="200" ry="35" fill="#2a5a2a" opacity="0.6"/>`;
+
+  // Trayectoria
+  const maxH = success ? 140 : 60 + pct*60;
+  content += `<path d="M150,190 Q170,${190-maxH/2} 200,${190-maxH}" fill="none" stroke="rgba(200,168,75,0.3)" stroke-width="1" stroke-dasharray="4,3"/>`;
+
+  // Cohete animado
+  const rocketY = success ? 30 : 190 - maxH;
+  const rocketX = success ? 200 : 155;
+
+  // Llama
+  content += `
+    <ellipse cx="${rocketX}" cy="${rocketY+18}" rx="4" ry="8" fill="#f0a000" opacity="0.9"/>
+    <ellipse cx="${rocketX}" cy="${rocketY+22}" rx="2.5" ry="5" fill="#ff6600" opacity="0.7"/>`;
+
+  // Cuerpo cohete
+  content += `
+    <rect x="${rocketX-5}" y="${rocketY}" width="10" height="18" rx="2" fill="#e8e8f0"/>
+    <polygon points="${rocketX-5},${rocketY} ${rocketX+5},${rocketY} ${rocketX},${rocketY-8}" fill="#c8a84b"/>
+    <rect x="${rocketX-8}" y="${rocketY+12}" width="4" height="6" rx="1" fill="#7eb8d4"/>
+    <rect x="${rocketX+4}" y="${rocketY+12}" width="4" height="6" rx="1" fill="#7eb8d4"/>`;
+
+  // Órbita si tiene éxito
+  if(success) {
+    content += `<ellipse cx="150" cy="130" rx="80" ry="25" fill="none" stroke="#3ecf8e" stroke-width="1" stroke-dasharray="5,3" opacity="0.6"/>`;
+    content += `<circle cx="230" cy="130" r="5" fill="#3ecf8e" opacity="0.8"/>`;
+  }
+
+  // Indicador Δv
+  const barW = Math.min(pct, 1) * 200;
+  content += `
+    <rect x="50" y="185" width="200" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+    <rect x="50" y="185" width="${barW}" height="6" rx="3" fill="${success?'#3ecf8e':'#e05555'}"/>
+    <text x="50" y="198" font-family="JetBrains Mono" font-size="7" fill="rgba(255,255,255,0.4)">0</text>
+    <text x="245" y="198" font-family="JetBrains Mono" font-size="7" fill="rgba(255,255,255,0.4)">LEO</text>`;
+
+  svg.innerHTML = content;
+}
+
+// ── Init ──
+loadRocket('falcon9');
+</script>
+</body>
+</html>
