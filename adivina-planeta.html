@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adivina el Planeta — Con F de Física</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());gtag('config','G-X1395XCX0L');
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--bg2:#0e0e1a;--bg3:#141425;
+  --border:rgba(255,255,255,0.08);--text:#e8e8f0;--muted:#6a6a88;
+  --accent:#c8a84b;--correct:#3ecf8e;--wrong:#e05555;
+  --serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);min-height:100vh;padding-bottom:4rem}
+
+header{border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.95)}
+.brand{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.back{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;color:var(--muted);text-decoration:none}
+
+/* ── PANTALLAS ── */
+.screen{display:none;animation:fadeIn .4s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PANTALLA INICIO ── */
+.intro{text-align:center;padding:2.5rem 1.5rem 2rem;max-width:700px;margin:0 auto}
+.intro h1{font-size:clamp(2rem,6vw,3.5rem);font-weight:500;font-style:italic;margin-bottom:.4rem}
+.intro h1 em{color:var(--accent);font-style:normal}
+.intro-sub{font-size:1rem;color:var(--muted);font-style:italic;margin-bottom:2rem}
+.intro-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+.btn-big{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;border:none;border-radius:6px;padding:.8rem 2rem;cursor:pointer;transition:opacity .2s}
+.btn-big:hover{opacity:.85}
+.btn-gold{background:var(--accent);color:#111}
+.btn-ghost{background:var(--bg2);color:var(--muted);border:1px solid var(--border)}
+
+/* ── EXPLORADOR ── */
+.explorer{max-width:900px;margin:0 auto;padding:1.5rem 1rem}
+.explorer-title{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;text-align:center}
+
+/* Carrusel fichas */
+.cards-scroll{
+  display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;padding-bottom:1rem;scrollbar-width:none;
+}
+.cards-scroll::-webkit-scrollbar{display:none}
+
+.planet-card{
+  flex-shrink:0;width:280px;scroll-snap-align:start;
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;cursor:pointer;transition:border-color .2s;
+}
+.planet-card:hover{border-color:var(--accent)}
+.planet-card.selected{border-color:var(--accent)}
+
+.planet-visual{
+  height:120px;display:flex;align-items:center;justify-content:center;
+  font-size:4rem;position:relative;overflow:hidden;
+}
+.planet-ring{
+  position:absolute;width:140px;height:30px;border-radius:50%;
+  border:6px solid rgba(255,255,255,0.2);transform:rotate(-15deg);
+}
+
+.planet-body{padding:1rem}
+.planet-name{font-size:1.2rem;font-weight:500;margin-bottom:.3rem}
+.planet-type{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem}
+.planet-fact{font-size:.85rem;color:var(--muted);font-style:italic;line-height:1.45;margin-bottom:.8rem}
+.planet-stats{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.stat-item{background:var(--bg3);border-radius:4px;padding:.35rem .5rem}
+.stat-label{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.1rem}
+.stat-val{font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+
+/* Detail panel */
+.detail-panel{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:1.2rem;margin-top:1rem;display:none;animation:fadeIn .3s ease;
+}
+.detail-panel.visible{display:block}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem;margin-bottom:1rem}
+.detail-item{background:var(--bg3);border-radius:6px;padding:.5rem .7rem}
+.detail-label{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.15rem}
+.detail-val{font-family:var(--mono);font-size:.85rem;color:var(--text)}
+.detail-curiosity{font-size:.9rem;color:var(--muted);font-style:italic;line-height:1.5;padding:.7rem;background:var(--bg3);border-radius:6px;border-left:3px solid var(--accent)}
+
+/* Scroll hint */
+.scroll-hint-h{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:.4rem}
+
+/* ── QUIZ ── */
+.quiz-wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem}
+
+.score-bar{display:flex;gap:1.5rem;align-items:center;justify-content:center;margin-bottom:1.5rem;font-family:var(--mono)}
+.score-item{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.score-val{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.score-sep{width:1px;height:32px;background:var(--border)}
+
+.progress-bar-wrap{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin-bottom:1.5rem}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+
+/* Clue card */
+.clue-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.4rem;margin-bottom:1.2rem}
+.clue-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;text-align:center}
+.clues-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
+@media(max-width:400px){.clues-grid{grid-template-columns:1fr}}
+.clue-item{background:var(--bg3);border-radius:6px;padding:.6rem .8rem}
+.clue-name{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+.clue-value{font-family:var(--mono);font-size:.95rem;color:var(--text);font-weight:500}
+
+/* Options */
+.opts-label{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;text-align:center}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+@media(max-width:400px){.opts-grid{grid-template-columns:1fr}}
+.opt-btn{background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;padding:.7rem .9rem;color:var(--text);font-family:var(--serif);font-size:1rem;cursor:pointer;transition:border-color .15s,background .15s;text-align:left;display:flex;align-items:center;gap:.5rem}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(200,168,75,.07)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct{border-color:var(--correct);background:rgba(62,207,142,.1);color:var(--correct)}
+.opt-btn.wrong{border-color:var(--wrong);background:rgba(224,85,85,.08);color:var(--wrong);opacity:.7}
+.opt-emoji{font-size:1.3rem}
+
+/* Feedback */
+.feedback{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;display:none;animation:fadeIn .3s ease;margin-bottom:1rem}
+.feedback.visible{display:block}
+.fb-result{font-family:var(--serif);font-size:1.4rem;font-style:italic;margin-bottom:.3rem}
+.fb-result.ok{color:var(--correct)}
+.fb-result.bad{color:var(--wrong)}
+.fb-text{font-size:.88rem;color:var(--muted);line-height:1.5;margin-bottom:.8rem}
+.btn-next{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#111;border:none;border-radius:6px;padding:.55rem 1.5rem;cursor:pointer}
+
+/* End */
+.end-screen{text-align:center;padding:3rem 1.5rem;max-width:500px;margin:0 auto}
+.end-trophy{font-size:4rem;margin-bottom:1rem}
+.end-title{font-family:var(--serif);font-size:2.2rem;font-style:italic;color:var(--accent);margin-bottom:.5rem}
+.end-score{font-size:1rem;color:var(--muted);margin-bottom:2rem}
+.end-score strong{color:var(--text);font-size:1.3rem}
+.end-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">Con F de Física</span>
+  <a href="index.html" class="back">← Volver</a>
+</header>
+
+<!-- ══ PANTALLA INICIO ══ -->
+<div class="screen active" id="screen-intro">
+  <div class="intro">
+    <p style="font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem">Desafío astronómico</p>
+    <h1>Adivina el <em>Planeta</em></h1>
+    <p class="intro-sub">Datos enigmáticos. Cuatro opciones. ¿Cuánto sabes del sistema solar?</p>
+    <div class="intro-btns">
+      <button class="btn-big btn-gold" onclick="showScreen('screen-explorer')">🔭 Estudiar primero</button>
+      <button class="btn-big btn-ghost" onclick="startQuiz()">▶ Jugar directamente</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANTALLA EXPLORADOR ══ -->
+<div class="screen" id="screen-explorer">
+  <div class="explorer">
+    <div class="explorer-title">Explora los mundos del sistema solar — toca una tarjeta para ver más datos</div>
+    <div class="cards-scroll" id="cards-scroll"></div>
+    <div class="scroll-hint-h">← Desliza →</div>
+    <div class="detail-panel" id="detail-panel"></div>
+    <div style="text-align:center;margin-top:1.5rem">
+      <button class="btn-big btn-gold" onclick="startQuiz()">¡Ya estoy listo! ▶ Jugar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANTALLA QUIZ ══ -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-wrap">
+    <div class="score-bar">
+      <div class="score-item"><span class="score-val" id="sc-ok">0</span><span class="score-label">Correctas</span></div>
+      <div class="score-sep"></div>
+      <div class="score-item"><span class="score-val" id="sc-tot">0</span><span class="score-label">Jugadas</span></div>
+      <div class="score-sep"></div>
+      <div class="score-item"><span class="score-val" id="sc-pct">—</span><span class="score-label">Acierto</span></div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill"></div></div>
+    <div class="clue-card">
+      <div class="clue-tag">¿Qué mundo es este?</div>
+      <div class="clues-grid" id="clues-grid"></div>
+    </div>
+    <div class="opts-label">Elige tu respuesta</div>
+    <div class="opts-grid" id="opts-grid"></div>
+    <div class="feedback" id="feedback">
+      <div class="fb-result" id="fb-result"></div>
+      <div class="fb-text" id="fb-text"></div>
+      <button class="btn-next" id="btn-next">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANTALLA FIN ══ -->
+<div class="screen" id="screen-end">
+  <div class="end-screen">
+    <div class="end-trophy" id="end-trophy">🏆</div>
+    <div class="end-title" id="end-title">¡Bien jugado!</div>
+    <div class="end-score" id="end-score"></div>
+    <div class="end-btns">
+      <button class="btn-big btn-gold" onclick="startQuiz()">Jugar de nuevo</button>
+      <button class="btn-big btn-ghost" onclick="showScreen('screen-explorer')">🔭 Repasar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATOS ──
+const WORLDS = [
+  {
+    name:'Mercurio', emoji:'🪨', color:'#a0856a', type:'Planeta rocoso',
+    fact:'El planeta más pequeño del sistema solar y el más cercano al Sol. Un año dura solo 88 días terrestres.',
+    curiosity:'A pesar de ser el más cercano al Sol, no es el más caliente — Venus lo supera gracias a su efecto invernadero.',
+    stats:{
+      'Distancia al Sol':'0.39 UA','Período orbital':'88 días',
+      'Gravedad':'3.7 m/s²','Temperatura':'430 °C / -180 °C',
+      'Lunas':'0','Diámetro':'4 879 km',
+      'Atmósfera':'Casi nula','Densidad':'5 427 kg/m³'
+    }
+  },
+  {
+    name:'Venus', emoji:'🌕', color:'#e8c57a', type:'Planeta rocoso',
+    fact:'El planeta más brillante del cielo nocturno y el más caliente del sistema solar: 465 °C en superficie.',
+    curiosity:'Un día en Venus dura más que un año venusiano. Además, rota en sentido contrario al resto de planetas.',
+    stats:{
+      'Distancia al Sol':'0.72 UA','Período orbital':'225 días',
+      'Gravedad':'8.9 m/s²','Temperatura':'465 °C',
+      'Lunas':'0','Diámetro':'12 104 km',
+      'Atmósfera':'CO₂ densa (93 atm)','Densidad':'5 243 kg/m³'
+    }
+  },
+  {
+    name:'Tierra', emoji:'🌍', color:'#4a9eff', type:'Planeta rocoso',
+    fact:'El único planeta conocido con vida. Tiene una luna grande en relación a su tamaño, que estabiliza su eje.',
+    curiosity:'La Tierra no es perfectamente esférica: está ligeramente achatada en los polos y abultada en el ecuador.',
+    stats:{
+      'Distancia al Sol':'1.00 UA','Período orbital':'365.25 días',
+      'Gravedad':'9.8 m/s²','Temperatura':'15 °C (media)',
+      'Lunas':'1','Diámetro':'12 742 km',
+      'Atmósfera':'N₂ + O₂','Densidad':'5 514 kg/m³'
+    }
+  },
+  {
+    name:'Luna', emoji:'🌑', color:'#aaaaaa', type:'Satélite natural (Tierra)',
+    fact:'La única luna de la Tierra. Estabiliza el eje de rotación terrestre y genera las mareas.',
+    curiosity:'La Luna se aleja de la Tierra 3.82 cm cada año por disipación mareal. Hace 1.4 Ga los días duraban 18 horas.',
+    stats:{
+      'Distancia a Tierra':'384 400 km','Período orbital':'27.32 días',
+      'Gravedad':'1.62 m/s²','Temperatura':'127 °C / -173 °C',
+      'Diámetro':'3 474 km','Órbita':'Casi circular (e=0.055)',
+      'Atmósfera':'Casi nula','Densidad':'3 344 kg/m³'
+    }
+  },
+  {
+    name:'Marte', emoji:'🔴', color:'#c1440e', type:'Planeta rocoso',
+    fact:'El planeta rojo. Tiene el volcán más alto del sistema solar: el Olympus Mons, con 22 km de altura.',
+    curiosity:'Marte tiene dos pequeñas lunas, Fobos y Deimos, que probablemente son asteroides capturados.',
+    stats:{
+      'Distancia al Sol':'1.52 UA','Período orbital':'687 días',
+      'Gravedad':'3.7 m/s²','Temperatura':'-63 °C (media)',
+      'Lunas':'2','Diámetro':'6 779 km',
+      'Atmósfera':'CO₂ delgada (0.006 atm)','Densidad':'3 933 kg/m³'
+    }
+  },
+  {
+    name:'Fobos', emoji:'🪨', color:'#8a7a6a', type:'Luna de Marte',
+    fact:'La luna más grande de Marte. Orbita tan cerca que da 3 vueltas al día marciano.',
+    curiosity:'Fobos se acerca a Marte 1.8 cm por año. En unos 50 millones de años se desintegrará formando un anillo.',
+    stats:{
+      'Distancia a Marte':'9 376 km','Período orbital':'7.6 horas',
+      'Gravedad':'0.006 m/s²','Diámetro':'22.4 km',
+      'Forma':'Irregular','Superficie':'Cráteres y surcos'
+    }
+  },
+  {
+    name:'Júpiter', emoji:'🪐', color:'#c88b3a', type:'Gigante gaseoso', hasRing:false,
+    fact:'El planeta más grande del sistema solar. Su Gran Mancha Roja es una tormenta que lleva siglos activa.',
+    curiosity:'Júpiter actúa como escudo gravitacional: atrae muchos asteroides y cometas que de otro modo podrían impactar la Tierra.',
+    stats:{
+      'Distancia al Sol':'5.20 UA','Período orbital':'11.86 años',
+      'Gravedad':'24.8 m/s²','Temperatura':'-110 °C (nubes)',
+      'Lunas':'+95','Diámetro':'139 820 km',
+      'Atmósfera':'H₂ + He','Densidad':'1 326 kg/m³'
+    }
+  },
+  {
+    name:'Ío', emoji:'🌋', color:'#e8d44d', type:'Luna de Júpiter',
+    fact:'El cuerpo más volcánicamente activo del sistema solar. Sus erupciones pueden alcanzar 300 km de altura.',
+    curiosity:'El calor no viene del Sol sino de las fuerzas de marea de Júpiter, que deforman y calientan su interior.',
+    stats:{
+      'Distancia a Júpiter':'421 700 km','Período orbital':'1.77 días',
+      'Gravedad':'1.8 m/s²','Temperatura':'-143 °C (media)',
+      'Diámetro':'3 643 km','Volcanes':'+400 activos',
+      'Atmósfera':'SO₂ delgada','Densidad':'3 528 kg/m³'
+    }
+  },
+  {
+    name:'Europa', emoji:'🧊', color:'#b8d4e8', type:'Luna de Júpiter',
+    fact:'Bajo su corteza de hielo existe un océano global de agua líquida. Es uno de los mejores candidatos a albergar vida.',
+    curiosity:'El océano de Europa contiene más agua que todos los océanos de la Tierra juntos.',
+    stats:{
+      'Distancia a Júpiter':'671 100 km','Período orbital':'3.55 días',
+      'Gravedad':'1.3 m/s²','Temperatura':'-160 °C',
+      'Diámetro':'3 121 km','Océano':'~100 km de profundidad',
+      'Corteza':'Hielo de ~10-30 km','Densidad':'3 013 kg/m³'
+    }
+  },
+  {
+    name:'Ganimedes', emoji:'🌑', color:'#8899aa', type:'Luna de Júpiter',
+    fact:'La luna más grande del sistema solar, mayor que Mercurio. Tiene su propio campo magnético.',
+    curiosity:'Ganimedes es la única luna del sistema solar con magnetosfera propia, generando auroras.',
+    stats:{
+      'Distancia a Júpiter':'1 070 400 km','Período orbital':'7.15 días',
+      'Gravedad':'1.4 m/s²','Temperatura':'-163 °C',
+      'Diámetro':'5 268 km','Campo magnético':'Sí',
+      'Atmósfera':'O₂ tenue','Densidad':'1 936 kg/m³'
+    }
+  },
+  {
+    name:'Saturno', emoji:'🪐', color:'#e8d5a0', type:'Gigante gaseoso', hasRing:true,
+    fact:'Sus anillos, formados por hielo y roca, se extienden 282 000 km desde el planeta pero tienen solo ~10 m de grosor.',
+    curiosity:'Saturno es tan poco denso que flotaría en agua. Es el único planeta con densidad menor que la del agua.',
+    stats:{
+      'Distancia al Sol':'9.58 UA','Período orbital':'29.5 años',
+      'Gravedad':'10.4 m/s²','Temperatura':'-140 °C (nubes)',
+      'Lunas':'+146','Diámetro':'116 460 km',
+      'Densidad':'687 kg/m³ (< agua)','Atmósfera':'H₂ + He'
+    }
+  },
+  {
+    name:'Titán', emoji:'🟤', color:'#c8a060', type:'Luna de Saturno',
+    fact:'La única luna del sistema solar con una atmósfera densa. Tiene lagos y ríos de metano líquido.',
+    curiosity:'La presión en la superficie de Titán es 1.5 veces la de la Tierra. Con traje de abrigo pero sin escafandra podrías sobrevivir.',
+    stats:{
+      'Distancia a Saturno':'1 221 870 km','Período orbital':'15.95 días',
+      'Gravedad':'1.35 m/s²','Temperatura':'-179 °C',
+      'Diámetro':'5 149 km','Atmósfera':'N₂ + CH₄ (1.5 atm)',
+      'Lagos':'Metano líquido','Densidad':'1 882 kg/m³'
+    }
+  },
+  {
+    name:'Encélado', emoji:'💧', color:'#e0f0ff', type:'Luna de Saturno',
+    fact:'Tiene géiseres de vapor de agua que alimentan el anillo E de Saturno. Bajo su hielo hay un océano global.',
+    curiosity:'Las partículas de Encélado forman el anillo E de Saturno. La sonda Cassini atravesó esos géiseres y detectó moléculas orgánicas.',
+    stats:{
+      'Distancia a Saturno':'238 020 km','Período orbital':'1.37 días',
+      'Gravedad':'0.11 m/s²','Temperatura':'-201 °C',
+      'Diámetro':'504 km','Géiseres':'Vapor de agua y orgánicos',
+      'Océano':'Global bajo el hielo','Densidad':'1 610 kg/m³'
+    }
+  },
+  {
+    name:'Urano', emoji:'🔵', color:'#7de8e8', type:'Gigante helado',
+    fact:'Tiene el eje de rotación casi horizontal (98°), por lo que rueda de lado alrededor del Sol.',
+    curiosity:'Urano emite menos calor interno que Neptuno. Los científicos aún no entienden bien por qué está tan frío.',
+    stats:{
+      'Distancia al Sol':'19.2 UA','Período orbital':'84 años',
+      'Gravedad':'8.9 m/s²','Temperatura':'-195 °C',
+      'Lunas':'27','Diámetro':'50 724 km',
+      'Inclinación axial':'97.8°','Densidad':'1 271 kg/m³'
+    }
+  },
+  {
+    name:'Neptuno', emoji:'🔵', color:'#4466ff', type:'Gigante helado',
+    fact:'El planeta más alejado del Sol. Tiene los vientos más rápidos del sistema solar: hasta 2 100 km/h.',
+    curiosity:'Neptuno fue el único planeta descubierto mediante cálculos matemáticos antes de ser observado.',
+    stats:{
+      'Distancia al Sol':'30.1 UA','Período orbital':'165 años',
+      'Gravedad':'11.2 m/s²','Temperatura':'-200 °C',
+      'Lunas':'16','Diámetro':'49 244 km',
+      'Vientos':'2 100 km/h','Densidad':'1 638 kg/m³'
+    }
+  },
+  {
+    name:'Tritón', emoji:'🌑', color:'#99aabb', type:'Luna de Neptuno',
+    fact:'La única luna grande del sistema solar con órbita retrógrada. Orbita en sentido contrario a la rotación de Neptuno.',
+    curiosity:'Tritón está condenado: dentro de unos 3 700 millones de años las mareas lo desintegrarán en un anillo.',
+    stats:{
+      'Distancia a Neptuno':'354 759 km','Período orbital':'5.88 días (retrógrada)',
+      'Gravedad':'0.78 m/s²','Temperatura':'-235 °C',
+      'Diámetro':'2 706 km','Géiseres':'Nitrógeno líquido',
+      'Atmósfera':'N₂ tenue','Densidad':'2 061 kg/m³'
+    }
+  },
+  {
+    name:'Plutón', emoji:'❄️', color:'#c8b8a8', type:'Planeta enano',
+    fact:'Fue el noveno planeta hasta 2006, cuando fue reclasificado como planeta enano por la UAI.',
+    curiosity:'El corazón de Plutón — la región Tombaugh Regio — es una llanura de nitrógeno helado con forma de corazón perfecta.',
+    stats:{
+      'Distancia al Sol':'39.5 UA','Período orbital':'248 años',
+      'Gravedad':'0.62 m/s²','Temperatura':'-229 °C',
+      'Lunas':'5','Diámetro':'2 376 km',
+      'Excentricidad':'0.249','Densidad':'1 854 kg/m³'
+    }
+  },
+  {
+    name:'Carón', emoji:'🌑', color:'#888899', type:'Luna de Plutón',
+    fact:'Tan grande en relación a Plutón que forman un sistema doble: orbitan un punto entre los dos.',
+    curiosity:'Carón y Plutón siempre se muestran la misma cara. Están en rotación síncrona mutua, algo único en el sistema solar.',
+    stats:{
+      'Distancia a Plutón':'19 571 km','Período orbital':'6.39 días',
+      'Gravedad':'0.29 m/s²','Temperatura':'-220 °C',
+      'Diámetro':'1 212 km','Ratio Plutón/Carón':'0.51',
+      'Órbita':'Síncrona mutua','Densidad':'1 700 kg/m³'
+    }
+  },
+];
+
+// ── EXPLORADOR ──
+function renderExplorer() {
+  const scroll = document.getElementById('cards-scroll');
+  scroll.innerHTML = '';
+  WORLDS.forEach((w,i) => {
+    const card = document.createElement('div');
+    card.className = 'planet-card';
+    card.onclick = () => showDetail(i);
+    card.innerHTML = `
+      <div class="planet-visual" style="background:linear-gradient(135deg,${w.color}33,${w.color}11)">
+        ${w.hasRing ? '<div class="planet-ring"></div>' : ''}
+        <span style="position:relative;z-index:1">${w.emoji}</span>
+      </div>
+      <div class="planet-body">
+        <div class="planet-name">${w.name}</div>
+        <div class="planet-type">${w.type}</div>
+        <div class="planet-fact">${w.fact}</div>
+        <div class="planet-stats">
+          ${Object.entries(w.stats).slice(0,4).map(([k,v])=>`
+            <div class="stat-item">
+              <div class="stat-label">${k}</div>
+              <div class="stat-val">${v}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    scroll.appendChild(card);
+  });
+}
+
+let selectedCard = -1;
+function showDetail(i) {
+  const w = WORLDS[i];
+  // Toggle
+  if(selectedCard === i) {
+    document.getElementById('detail-panel').classList.remove('visible');
+    document.querySelectorAll('.planet-card')[i].classList.remove('selected');
+    selectedCard = -1;
+    return;
+  }
+  selectedCard = i;
+  document.querySelectorAll('.planet-card').forEach((c,j) => c.classList.toggle('selected', j===i));
+
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = `
+    <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1rem">
+      <span style="font-size:2rem">${w.emoji}</span>
+      <div>
+        <div style="font-size:1.2rem;font-weight:500">${w.name}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">${w.type}</div>
+      </div>
+    </div>
+    <div class="detail-grid">
+      ${Object.entries(w.stats).map(([k,v])=>`
+        <div class="detail-item">
+          <div class="detail-label">${k}</div>
+          <div class="detail-val">${v}</div>
+        </div>`).join('')}
+    </div>
+    <div class="detail-curiosity">💡 ${w.curiosity}</div>`;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// ── QUIZ ──
+const ROUNDS = 12;
+let queue=[], round=0, score=0, answered=false;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildQueue(){ return shuffle(WORLDS).slice(0,ROUNDS); }
+
+// Elegir 4 pistas aleatorias del mundo
+function getClues(w) {
+  const entries = Object.entries(w.stats);
+  return shuffle(entries).slice(0,4);
+}
+
+function startQuiz() {
+  queue = buildQueue();
+  round = 0; score = 0; answered = false;
+  showScreen('screen-quiz');
+  renderRound();
+}
+
+function renderRound() {
+  answered = false;
+  const w = queue[round];
+  const clues = getClues(w);
+
+  // Progress
+  document.getElementById('prog-fill').style.width = `${(round/ROUNDS)*100}%`;
+
+  // Clues
+  const cg = document.getElementById('clues-grid');
+  cg.innerHTML = clues.map(([k,v])=>`
+    <div class="clue-item">
+      <div class="clue-name">${k}</div>
+      <div class="clue-value">${v}</div>
+    </div>`).join('');
+
+  // Options: correct + 3 random
+  const others = shuffle(WORLDS.filter(x=>x.name!==w.name)).slice(0,3);
+  const opts = shuffle([w,...others]);
+  const og = document.getElementById('opts-grid');
+  og.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-emoji">${opt.emoji}</span>${opt.name}`;
+    btn.onclick = () => handleAnswer(opt, w);
+    og.appendChild(btn);
+  });
+
+  document.getElementById('feedback').classList.remove('visible');
+}
+
+function handleAnswer(chosen, correct) {
+  if(answered) return;
+  answered = true;
+  const ok = chosen.name === correct.name;
+  if(ok) score++;
+
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.disabled = true;
+    const name = btn.textContent.trim().replace(/^.\s/,'');
+    if(name === correct.name) btn.classList.add('correct');
+    else if(name === chosen.name && !ok) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  document.getElementById('fb-result').textContent = ok ? '¡Correcto! 🎉' : `Era ${correct.emoji} ${correct.name}`;
+  document.getElementById('fb-result').className = 'fb-result '+(ok?'ok':'bad');
+  document.getElementById('fb-text').textContent = correct.curiosity;
+  fb.classList.add('visible');
+
+  const tot = round+1;
+  document.getElementById('sc-ok').textContent = score;
+  document.getElementById('sc-tot').textContent = tot;
+  document.getElementById('sc-pct').textContent = Math.round(score/tot*100)+'%';
+}
+
+document.getElementById('btn-next').onclick = () => {
+  round++;
+  if(round >= ROUNDS) showEnd();
+  else renderRound();
+};
+
+function showEnd() {
+  showScreen('screen-end');
+  const pct = Math.round(score/ROUNDS*100);
+  let trophy='🥉',title='¡Sigue explorando!';
+  if(pct>=90){trophy='🌌';title='¡Astrónomo experto!';}
+  else if(pct>=70){trophy='🏆';title='¡Muy bien!';}
+  else if(pct>=50){trophy='🥈';title='¡Nada mal!';}
+  document.getElementById('end-trophy').textContent=trophy;
+  document.getElementById('end-title').textContent=title;
+  document.getElementById('end-score').innerHTML=`Has acertado <strong>${score} de ${ROUNDS}</strong> mundos (${pct}%)`;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Init
+renderExplorer();
+</script>
+</body>
+</html>
