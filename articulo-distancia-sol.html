@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿A qué distancia del Sol se congelaría o evaporaría el agua? — Con F de Física</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X1395XCX0L');</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#faf8f4;--bg2:#f2ede4;--ink:#1a1a1a;--ink2:#3a3a3a;--muted:#888;--rule:#d0c8be;--accent:#8b2e00;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono',monospace}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.75;min-height:100vh}
+header{border-bottom:1px solid var(--rule);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
+.brand{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);text-decoration:none}
+.back{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--accent)}
+.hero-art{background:var(--ink);color:white;padding:3rem 1.5rem 2.5rem}
+.hero-inner{max-width:720px;margin:0 auto}
+.art-cat{font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.8rem}
+.art-title{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:500;font-style:italic;line-height:1.2;margin-bottom:1rem}
+.art-meta{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.45);letter-spacing:.08em}
+.art-meta span{color:rgba(255,255,255,.7)}
+.hero-img{width:100%;max-height:420px;object-fit:cover;display:block}
+.container{max-width:720px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.abstract{background:var(--bg2);border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin-bottom:2.5rem;font-style:italic;font-size:.95rem;color:var(--ink2);line-height:1.65}
+.abstract strong{font-style:normal;font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.5rem}
+h2{font-size:1.5rem;font-weight:500;color:var(--accent);margin:2.5rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;font-weight:500;margin:1.5rem 0 .5rem}
+p{color:var(--ink2);margin-bottom:1.1rem}
+ul,ol{color:var(--ink2);padding-left:1.5rem;margin-bottom:1.1rem}
+li{margin-bottom:.4rem}
+.formula{font-family:var(--mono);font-size:.88rem;background:var(--bg2);border:1px solid var(--rule);padding:.7rem 1rem;margin:1rem 0;border-radius:3px;overflow-x:auto;color:var(--ink);line-height:2}
+.result-card{background:var(--ink);color:white;border-radius:6px;padding:1.2rem 1.5rem;margin:1.5rem 0;display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:480px){.result-card{grid-template-columns:1fr}}
+.result-item{}
+.result-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.3rem}
+.result-val{font-family:var(--mono);font-size:1.1rem;color:var(--accent);font-weight:500}
+.result-desc{font-size:.85rem;color:rgba(255,255,255,.6);margin-top:.2rem;font-style:italic}
+.data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.85rem}
+.data-table th{background:var(--ink);color:white;padding:.5rem .8rem;text-align:left;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase}
+.data-table td{padding:.5rem .8rem;border-bottom:1px solid var(--rule);color:var(--ink2);font-family:var(--mono);font-size:.78rem}
+.data-table tr:nth-child(even) td{background:var(--bg2)}
+.highlight-box{background:rgba(139,46,0,.06);border:1px solid rgba(139,46,0,.2);border-radius:4px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight-box p{margin-bottom:0}
+.authors{background:var(--bg2);border:1px solid var(--rule);padding:1.2rem 1.5rem;margin-top:3rem;border-radius:4px}
+.authors-title{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.author{font-size:.92rem;color:var(--ink2);margin-bottom:.3rem}
+.pub-info{font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:.6rem}
+footer{border-top:1px solid var(--rule);padding:1rem 1.5rem;font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Con F de Física</a>
+  <a class="back" href="index.html">← Volver</a>
+</header>
+
+<div class="hero-art">
+  <div class="hero-inner">
+    <div class="art-cat">Artículos de Investigación · Falsable · 2025</div>
+    <h1 class="art-title">¿A qué distancia tendría que moverse la Tierra para que el agua se congelase o se evaporase?</h1>
+    <div class="art-meta"><span>Eloy Vallina</span> &nbsp;·&nbsp; 20 de noviembre de 2025</div>
+  </div>
+</div>
+
+<img class="hero-img" src="https://www.falsable.com/uploads/rpxsk5ep36agl22t335g6uni.jpeg" alt="Zonas habitables del sistema solar" loading="lazy">
+
+<div class="container">
+
+  <div class="abstract">
+    <strong>Resumen</strong>
+    Este estudio examina cómo variaciones en la distancia orbital de la Tierra al Sol afectarían la estabilidad del agua líquida. Usando un modelo de equilibrio radiativo estándar, se muestra que la temperatura de equilibrio escala con la raíz cuadrada inversa de la distancia heliocéntrica. Un alejamiento de solo el 12.8% en el radio orbital elevaría la temperatura efectiva al punto de congelación del agua. En contraste, alcanzar el umbral de evaporación requiere un acercamiento mucho mayor: la Tierra tendría que orbitar al 46.8% de su distancia actual al Sol.
+  </div>
+
+  <h2>Introducción</h2>
+  <p>La estabilidad del agua líquida en la superficie terrestre es la condición más importante para la vida tal como la conocemos. Esta estabilidad depende del equilibrio radiativo entre la energía que la Tierra recibe del Sol y la que irradia al espacio, así como de la composición atmosférica, el albedo y el efecto invernadero.</p>
+  <p>Un enfoque simplificado, basado en el equilibrio radiativo con un incremento constante de temperatura por efecto invernadero, permite estimar qué cambios en la distancia Tierra–Sol serían necesarios para que el agua se congelase o evaporase globalmente.</p>
+
+  <h2>1. Modelo físico</h2>
+  <p>Trabajamos con el modelo estándar de equilibrio energético planetario:</p>
+  <div class="formula">σ × T⁴ = (1 − A) × S / 4
+donde:
+  σ = 5.67 × 10⁻⁸ W/m²K⁴  (constante de Stefan-Boltzmann)
+  A = 0.30  (albedo medio de la Tierra)
+  S = constante solar a distancia r
+  T = temperatura efectiva media</div>
+
+  <p>La constante solar disminuye con la distancia siguiendo la ley del cuadrado inverso:</p>
+  <div class="formula">S = S₀ × (1 / r²)     con S₀ = 1361 W/m²</div>
+
+  <p>De donde se obtiene la relación escalar fundamental:</p>
+  <div class="formula">T / T₀ = (1/r²)^(1/4) = 1/√r
+→ r = (T₀ / T)²</div>
+
+  <p>con T₀ = 255 K (temperatura efectiva actual de la Tierra).</p>
+
+  <h2>2. Distancia necesaria para que el agua se congele</h2>
+  <p>Buscamos la distancia r tal que T = 273 K (punto de congelación del agua):</p>
+  <div class="formula">r_congelación = (T₀ / T_congelación)²
+r_congelación = (255 / 273)²
+r_congelación = (0.934)² ≈ 0.872 UA</div>
+
+  <div class="result-card">
+    <div class="result-item">
+      <div class="result-label">Distancia necesaria</div>
+      <div class="result-val">0.872 UA</div>
+      <div class="result-desc">87.2% de la distancia actual</div>
+    </div>
+    <div class="result-item">
+      <div class="result-label">Variación orbital</div>
+      <div class="result-val">−12.8%</div>
+      <div class="result-desc">Alejamiento respecto a 1 UA</div>
+    </div>
+  </div>
+
+  <h2>3. Distancia necesaria para que el agua se evapore</h2>
+  <p>Buscamos la distancia r tal que T = 373 K (punto de ebullición del agua):</p>
+  <div class="formula">r_evaporación = (T₀ / T_evaporación)²
+r_evaporación = (255 / 373)²
+r_evaporación = (0.684)² ≈ 0.468 UA</div>
+
+  <div class="result-card">
+    <div class="result-item">
+      <div class="result-label">Distancia necesaria</div>
+      <div class="result-val">0.468 UA</div>
+      <div class="result-desc">46.8% de la distancia actual</div>
+    </div>
+    <div class="result-item">
+      <div class="result-label">Variación orbital</div>
+      <div class="result-val">−53.2%</div>
+      <div class="result-desc">Acercamiento respecto a 1 UA</div>
+    </div>
+  </div>
+
+  <h2>4. Tabla resumen</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Fenómeno</th><th>Temperatura (K)</th><th>Distancia (UA)</th><th>Variación</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Congelación global</td><td>273 K</td><td>0.872 UA</td><td>−12.8%</td></tr>
+      <tr><td>Evaporación / ebullición</td><td>373 K</td><td>0.468 UA</td><td>−53.2%</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Interpretación física</h2>
+  <h3>Congelación global</h3>
+  <p>Un alejamiento del 12.8% sería suficiente para que la radiación absorbida disminuyese lo necesario para bajar la temperatura efectiva hasta 273 K, haciendo imposible la presencia estable de agua líquida en la superficie terrestre.</p>
+
+  <h3>Evaporación total</h3>
+  <p>Para que la Tierra alcance temperaturas de evaporación masiva (373 K de temperatura efectiva), se necesitaría un acercamiento dramático al Sol, reduciéndose la distancia a menos de la mitad de la actual.</p>
+
+  <div class="highlight-box">
+    <p>Estos resultados muestran la <strong>sensibilidad térmica del equilibrio climático terrestre</strong> y dan una idea clara de lo exigente que es la franja de habitabilidad para la presencia de agua líquida.</p>
+  </div>
+
+  <h2>6. Comparación con datos oficiales</h2>
+  <p>Los valores calculados son compatibles con datos académicos y referencias sobre temperatura efectiva y límites de habitabilidad terrestre:</p>
+  <ul>
+    <li>La distancia media Tierra–Sol es 1 UA ≈ 149.6 millones km.</li>
+    <li>La constante solar S₀ = 1361 W/m² produce una temperatura efectiva ≈ 255 K.</li>
+    <li>La temperatura media superficial actual es ≈ 288 K, con +33 K de efecto invernadero.</li>
+    <li>Modelos simplificados de balance radiativo indican que un incremento del 10–15% en la distancia produce enfriamiento suficiente para la congelación global — coherente con nuestro resultado de 12.8%.</li>
+    <li>Para alcanzar temperaturas de ebullición, los modelos indican una disminución del 40–50% — coherente con nuestro resultado de 53.2%.</li>
+  </ul>
+
+  <h2>7. Conclusión</h2>
+  <p>El rango orbital que permite la existencia de agua líquida es extremadamente estrecho. Basta una variación de apenas el 13% en la distancia Tierra–Sol para llevar al planeta hacia un estado de congelación global. Superar los 373 K exige, en cambio, una aproximación mucho más agresiva al Sol.</p>
+  <p>Estos resultados cuantitativos ilustran la sensibilidad térmica del equilibrio climático terrestre y dan una idea precisa de lo frágil que es la franja de habitabilidad para la presencia de agua líquida.</p>
+
+  <div class="authors">
+    <div class="authors-title">Autor</div>
+    <div class="author">Eloy Vallina — Con F de Física</div>
+    <div class="pub-info">Publicado en Falsable · 20 de noviembre de 2025</div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Con F de Física &nbsp;·&nbsp; <a href="index.html">Volver al inicio</a> &nbsp;·&nbsp; <a href="privacidad.html">Privacidad</a>
+</footer>
+</body>
+</html>

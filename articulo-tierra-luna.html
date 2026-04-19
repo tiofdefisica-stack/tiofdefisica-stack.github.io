@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolución dinámica del sistema Tierra–Luna — Con F de Física</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4616338233480732" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1395XCX0L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X1395XCX0L');</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#faf8f4;--bg2:#f2ede4;--ink:#1a1a1a;--ink2:#3a3a3a;--muted:#888;--rule:#d0c8be;--accent:#8b2e00;--serif:'EB Garamond',Georgia,serif;--mono:'JetBrains Mono',monospace}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.75;min-height:100vh}
+header{border-bottom:1px solid var(--rule);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
+.brand{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);text-decoration:none}
+.back{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--accent)}
+.hero-art{background:var(--ink);color:white;padding:3rem 1.5rem 2.5rem}
+.hero-inner{max-width:720px;margin:0 auto}
+.art-cat{font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.8rem}
+.art-title{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:500;font-style:italic;line-height:1.2;margin-bottom:1rem}
+.art-meta{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.45);letter-spacing:.08em}
+.art-meta span{color:rgba(255,255,255,.7)}
+.hero-img{width:100%;max-height:420px;object-fit:cover;display:block}
+.container{max-width:720px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.abstract{background:var(--bg2);border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin-bottom:2.5rem;font-style:italic;font-size:.95rem;color:var(--ink2);line-height:1.65}
+.abstract strong{font-style:normal;font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.5rem}
+h2{font-size:1.5rem;font-weight:500;color:var(--accent);margin:2.5rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;font-weight:500;margin:1.5rem 0 .5rem}
+p{color:var(--ink2);margin-bottom:1.1rem}
+ul,ol{color:var(--ink2);padding-left:1.5rem;margin-bottom:1.1rem}
+li{margin-bottom:.4rem}
+.formula{font-family:var(--mono);font-size:.88rem;background:var(--bg2);border:1px solid var(--rule);padding:.6rem 1rem;margin:1rem 0;border-radius:3px;overflow-x:auto;color:var(--ink);line-height:1.8}
+.data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.82rem;overflow-x:auto;display:block}
+.data-table th{background:var(--ink);color:white;padding:.5rem .7rem;text-align:left;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.data-table td{padding:.45rem .7rem;border-bottom:1px solid var(--rule);color:var(--ink2);white-space:nowrap;font-family:var(--mono);font-size:.75rem}
+.data-table tr:nth-child(even) td{background:var(--bg2)}
+.highlight-box{background:rgba(139,46,0,.06);border:1px solid rgba(139,46,0,.2);border-radius:4px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight-box p{margin-bottom:0;font-weight:500}
+.authors{background:var(--bg2);border:1px solid var(--rule);padding:1.2rem 1.5rem;margin-top:3rem;border-radius:4px}
+.authors-title{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.author{font-size:.92rem;color:var(--ink2);margin-bottom:.3rem}
+.pub-info{font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:.6rem}
+.refs{margin-top:2rem}
+.refs li{font-size:.88rem;color:var(--muted);margin-bottom:.4rem;font-style:italic}
+footer{border-top:1px solid var(--rule);padding:1rem 1.5rem;font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Con F de Física</a>
+  <a class="back" href="index.html">← Volver</a>
+</header>
+
+<div class="hero-art">
+  <div class="hero-inner">
+    <div class="art-cat">Artículos de Investigación · Falsable · 2025</div>
+    <h1 class="art-title">Evolución dinámica del sistema Tierra–Luna: incremento secular de la velocidad orbital y transición futura hacia una órbita elíptica</h1>
+    <div class="art-meta"><span>Eloy Vallina</span> &nbsp;·&nbsp; 23 de noviembre de 2025</div>
+  </div>
+</div>
+
+<img class="hero-img" src="https://www.falsable.com/uploads/24xkcf2h5zrrufqwo3z3vrgu.jpg" alt="Sistema Tierra-Luna — Composición de Jaume Zapata" loading="lazy">
+
+<div class="container">
+
+  <div class="abstract">
+    <strong>Resumen</strong>
+    La interacción mareal entre la Tierra y la Luna produce una transferencia sostenida de momento angular desde la rotación terrestre hacia la órbita lunar. Este mecanismo explica el conocido alejamiento secular del satélite, pero también implica un efecto adicional poco discutido: la velocidad orbital de la Luna <em>aumenta</em>, no disminuye. Se presenta un estudio completo que combina dinámica orbital, cálculo energético, formulación analítica y una simulación Monte-Carlo de 100 000 iteraciones, demostrando que el incremento anual de velocidad, aunque real, está muy por debajo del umbral instrumental actual. Se discute la consecuencia dinámica a largo plazo: la desaparición de la fuerza mareal y la evolución natural hacia una órbita elíptica kepleriana.
+  </div>
+
+  <h2>1. Introducción</h2>
+  <p>Las mareas terrestres ejercen un torque que ralentiza la rotación de la Tierra y transfiere momento angular a la órbita lunar. El efecto observable es una deriva radial de aproximadamente 3.82 cm/año. Sin embargo, este proceso no solo modifica el semieje mayor: al realizar trabajo mecánico positivo, debe aumentar la energía cinética orbital del satélite. Por lo tanto, la velocidad orbital experimenta un ligero incremento anual.</p>
+  <p>Este artículo presenta una reconstrucción completa del fenómeno, abarcando: formulación teórica desde primeras leyes; cálculo explícito del Δv anual; simulación numérica de detectabilidad; discusión física e implicaciones a futuro; y la transición final hacia una órbita elíptica cuando el torque mareal se extinga.</p>
+
+  <h2>2. Marco teórico</h2>
+  <h3>2.1 Energía orbital</h3>
+  <p>En gravitación newtoniana, la energía mecánica total de un cuerpo en órbita es:</p>
+  <div class="formula">E = − G M m / (2a)
+donde:
+  G = constante de gravitación universal
+  M = masa de la Tierra
+  m = masa de la Luna
+  a = semieje mayor</div>
+  <p>El factor 2 proviene del teorema del virial aplicado a potenciales ∝ 1/r: la energía total es la mitad de la energía potencial media, con signo negativo.</p>
+
+  <h3>2.2 Transferencia de energía por mareas</h3>
+  <p>La potencia asociada al torque mareal es:</p>
+  <div class="formula">P = τ · ω_T
+donde:
+  τ = torque mareal
+  ω_T = velocidad angular terrestre</div>
+  <p>El aumento anual de energía es ΔE = P × (1 año). Como la energía cinética orbital es K = ½mv², se obtiene:</p>
+  <div class="formula">Δv = ΔE / (m · v)</div>
+
+  <h2>3. Cálculo del incremento anual de velocidad</h2>
+  <p>Usando valores medidos para el torque necesario para producir la deriva radial observada, el trabajo anual es aproximadamente:</p>
+  <div class="formula">ΔE ≈ 6.5 × 10⁹ J/año
+v ≈ 1 022 m/s  (velocidad orbital media actual)
+Δv ≈ 6.3 × 10⁻⁹ m/s por año</div>
+  <p>Este resultado es coherente con la energía transferida por el torque mareal y la variación orbital asociada.</p>
+
+  <h2>4. Simulación Monte-Carlo</h2>
+  <p>Con el fin de evaluar la detectabilidad experimental del Δv anual, se realizó una simulación Monte-Carlo de 1 000 iteraciones incorporando incertidumbres instrumentales realistas en medición radial y angular.</p>
+
+  <div style="overflow-x:auto;margin:1.5rem 0">
+  <table class="data-table">
+    <thead>
+      <tr><th>σ_r (m)</th><th>σ_θ (arcsec)</th><th>Media (m/s)</th><th>Std (m/s)</th><th>SNR</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0.01</td><td>1×10⁻⁵</td><td>2.34×10⁻⁸</td><td>5.28×10⁻⁹</td><td>4.43</td></tr>
+      <tr><td>0.01</td><td>1×10⁻⁴</td><td>2.31×10⁻⁸</td><td>1.01×10⁻⁸</td><td>2.28</td></tr>
+      <tr><td>0.01</td><td>1×10⁻³</td><td>2.46×10⁻⁸</td><td>8.60×10⁻⁸</td><td>0.29</td></tr>
+      <tr><td>1×10⁻⁵</td><td>1×10⁻⁵</td><td>2.24×10⁻⁸</td><td>5.54×10⁻⁹</td><td>0.40</td></tr>
+      <tr><td>1×10⁻⁵</td><td>1×10⁻⁴</td><td>2.38×10⁻⁸</td><td>5.56×10⁻⁹</td><td>0.43</td></tr>
+      <tr><td>1×10⁻⁵</td><td>1×10⁻³</td><td>2.42×10⁻⁸</td><td>1.02×10⁻⁷</td><td>0.24</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="highlight-box">
+    <p>El Δv anual es real, pero la señal queda tres órdenes de magnitud por debajo del ruido en la mayoría de configuraciones instrumentales simuladas.</p>
+  </div>
+
+  <h2>5. Discusión</h2>
+  <h3>5.1 Naturaleza no-kepleriana del sistema actual</h3>
+  <p>La órbita lunar no es estrictamente kepleriana: recibe trabajo mecánico continuado, mantiene una circularidad anómala y experimenta un aumento constante de su semieje mayor. La circularidad actual es forzada, no natural.</p>
+
+  <h3>5.2 Consecuencia del agotamiento de la fuerza de marea</h3>
+  <p>La fuerza de marea terrestre decrece como F_marea ∝ 1/r⁶. Cuando la Luna alcance una distancia suficientemente grande, el torque será insignificante, el sistema dejará de recibir energía, y ya no habrá un mecanismo que fuerce circularidad. Todo sistema ligado sin disipación tiende a moverse en órbitas keplerianas: la Luna evolucionará hacia una <em>órbita elíptica</em>.</p>
+
+  <h3>5.3 Relevancia observacional</h3>
+  <p>El Δv anual (~10⁻⁹ m/s) es demasiado pequeño para detección directa. Sin embargo, forma parte fundamental de la evolución secular del sistema y es indispensable en modelos de largo plazo.</p>
+
+  <h2>6. Conclusión</h2>
+  <ul>
+    <li>La Luna recibe trabajo mecánico continuo por la interacción mareal, lo que explica que su velocidad orbital aumente ligeramente cada año.</li>
+    <li>Ese incremento es de ≈ 6 × 10⁻⁹ m/s por año, consistente con el torque mareal medido.</li>
+    <li>La simulación Monte-Carlo confirma la existencia del efecto y muestra su indetectabilidad directa con instrumentación actual.</li>
+    <li>A muy largo plazo, la Luna pasará de su órbita casi circular actual a una <strong>órbita elíptica kepleriana</strong>, el estado natural de un sistema sin aporte energético.</li>
+  </ul>
+
+  <h2>Referencias</h2>
+  <ol class="refs">
+    <li>Murray, C.D. & Dermott, S.F. <em>Solar System Dynamics.</em> Cambridge University Press (1999).</li>
+    <li>Williams, G.E. "Geological constraints on the Precambrian history of Earth's rotation and the Moon's orbit." <em>Rev. Geophys.</em> 38, 37–60 (2000).</li>
+    <li>Lambeck, K. <em>The Earth's Variable Rotation.</em> Cambridge University Press (1980).</li>
+    <li>Dickey, J.O. et al. "Lunar Laser Ranging: a continuing legacy of the Apollo program." <em>Science</em> 265, 482–490 (1994).</li>
+    <li>Touma, J. & Wisdom, J. "Evolution of the Earth–Moon system." <em>Astron. J.</em> 108, 1943–1961 (1994).</li>
+    <li>Bills, B.G. & Ray, R.D. "Lunar orbital evolution: A synthesis of recent results." <em>Geophys. Res. Lett.</em> 26, 3045–3048 (1999).</li>
+  </ol>
+
+  <div class="authors">
+    <div class="authors-title">Autor</div>
+    <div class="author">Eloy Vallina — Con F de Física</div>
+    <div class="pub-info">Publicado en Falsable · 23 de noviembre de 2025</div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Con F de Física &nbsp;·&nbsp; <a href="index.html">Volver al inicio</a> &nbsp;·&nbsp; <a href="privacidad.html">Privacidad</a>
+</footer>
+</body>
+</html>
